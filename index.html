@@ -1,0 +1,1815 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#8b5a2b" />
+  <title>山線養豬讀書會｜會員課程與主辦廠商管理系統</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/app.v110.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-close" id="closeSidebar" type="button" aria-label="收合側欄">×</button>
+      <div class="brand-block">
+        <img class="brand-logo-image" src="assets/brand-logo-calligraphy.png" alt="山線養豬讀書會標誌">
+      </div>
+      <div class="mode-pill" id="modePill">管理端</div>
+      <nav class="nav-list nav-grouped" aria-label="主要功能">
+        <div class="nav-section-title">核心操作</div>
+        <button class="nav-item active" data-view="dashboard"><span>總覽首頁</span><small>下一堂課、公告、待辦摘要</small></button>
+        <button class="nav-item" data-view="courses"><span>年度課程表</span><small>時間、講師、地點、停車</small></button>
+        <button class="nav-item member-only" data-view="reply"><span>報名回覆</span><small>LINE 群組登記、牧場/姓名人數</small></button>
+        <button class="nav-item" data-view="attendance"><span>出席統計</span><small>報名、請假、未回覆、總人數</small></button>
+        <button class="nav-item" data-view="announcements"><span>公告中心</span><small>置頂通知、課程異動、停車提醒</small></button>
+        <button class="nav-item" data-view="members"><span>會員名單</span><small>一行式列表、新增與編輯</small></button>
+        <button class="nav-item admin-only" data-view="retired-members"><span>退會會員名單</span><small>退會資料保留、可恢復</small></button>
+
+        <div class="nav-section-title">現場與費用</div>
+        <button class="nav-item" data-view="checkin"><span>簽到報到</span><small>QR Code、現場報到、簽到表</small></button>
+        <button class="nav-item" data-view="finance"><span>費用結算</span><small>餐費、已收、未收、收款方式</small></button>
+        <button class="nav-item admin-only" data-view="annual-fees"><span>年度會費</span><small>年費、已繳、未繳、收款表</small></button>
+        <button class="nav-item" data-view="locations"><span>餐廳地點</span><small>Google 地圖、停車與包廂資訊</small></button>
+
+        <div class="nav-section-title">課後資料</div>
+        <button class="nav-item" data-view="records"><span>課後資料中心</span><small>課程重點、紀錄入口、知識庫搜尋</small></button>
+        <button class="nav-item" data-view="feedback"><span>問卷回饋</span><small>滿意度、下次想聽題目</small></button>
+
+        <div class="nav-section-title admin-only">幹部管理</div>
+        <button class="nav-item admin-only" data-view="speakers"><span>講師 / 主辦廠商</span><small>講師、廠商、主辦單位與邀約</small></button>
+        <button class="nav-item admin-only" data-view="prep"><span>課前分工</span><small>準備清單、負責人、期限</small></button>
+        <button class="nav-item admin-only" data-view="groups"><span>幹部名單</span><small>會長、組長、幹部資料管理</small></button>
+
+        <div class="nav-section-title admin-only">統計與規劃</div>
+        <button class="nav-item admin-only" data-view="report"><span>年度報表</span><small>課程、出席、主題、餐費統計</small></button>
+        <button class="nav-item admin-only" data-view="planning"><span>主題規劃</span><small>年度主題缺口與下一季建議</small></button>
+
+        <div class="nav-section-title admin-only">通知與上線</div>
+        <button class="nav-item admin-only" data-view="share-card"><span>LINE 公告 / 分享卡</span><small>課程通知、報名連結、分享文字</small></button>
+        <button class="nav-item admin-only" data-view="import"><span>會員匯入</span><small>CSV / Excel 批次匯入會員</small></button>
+        <button class="nav-item admin-only" data-view="course-import"><span>課程匯入</span><small>整年度課表批次匯入</small></button>
+        <button class="nav-item admin-only" data-view="sync"><span>雲端同步</span><small>Google Sheet 上傳、下載、測試</small></button>
+        <button class="nav-item admin-only" data-view="backup"><span>備份還原</span><small>自動備份、版本還原、JSON管理</small></button>
+        <button class="nav-item admin-only" data-view="settings"><span>設定中心</span><small>權限密碼、公開欄位、同步設定</small></button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="mini-label">製作者</div>
+        <strong>DIVA_W</strong>
+        <span>Google Sheet Sync / PWA</span>
+      </div>
+    </aside>
+
+    <main class="main" id="mainContent" tabindex="-1">
+      <section class="top-quick-actions mode-switch-actions" aria-label="端別切換">
+        <button class="ghost-btn" id="switchMemberMode">會員端</button>
+        <button class="ghost-btn" id="switchAdminMode">管理端</button>
+      </section>
+      <header class="hero hero-banner">
+        <button class="hamburger" id="toggleSidebar" aria-label="開關側欄">☰</button>
+      </header>
+
+      <section class="sync-quick-panel" id="globalSyncPanel">
+        <div class="sync-quick-info">
+          <strong>資料同步</strong>
+          <span id="globalSyncStatus">尚未同步</span>
+        </div>
+        <div class="sync-quick-actions">
+          <button class="ghost-btn small" id="downloadLatestData">下載最新</button>
+          <button class="ghost-btn small" id="uploadLatestData">上傳更新</button>
+          <button class="primary-btn small" id="syncLatestData">同步最新</button>
+        </div>
+      </section>
+
+      <section class="view active" id="view-dashboard">
+        <div class="member-mobile-primary" id="memberMobilePrimary"></div>
+        <div class="admin-mobile-workbench" id="adminMobileWorkbench"></div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <section class="panel dashboard-workbench">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Quick Workbench</p>
+              <h2>常用工作台</h2>
+              <p class="muted">把最常用的課程查詢、公告、出席回覆、簽到、餐費與同步集中在首頁，手機上不用一直找左側欄。</p>
+            </div>
+          </div>
+          <div class="dashboard-quick-grid" id="dashboardQuickModules"></div>
+        </section>
+        <div class="dashboard-alert-grid" id="dashboardAlerts"></div>
+        <div class="two-col">
+          <section class="panel next-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Next Course</p>
+                <h2>下一堂課</h2>
+              </div>
+              <button class="ghost-btn small" data-view-jump="courses">查看全部</button>
+            </div>
+            <div id="nextCourseDetail" class="empty-box">尚未建立課程資料。</div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Announcement</p>
+                <h2>本月提醒</h2>
+              </div>
+            </div>
+            <div class="notice-list" id="noticeList"></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Course Timeline</p>
+              <h2>年度課程進度</h2>
+            </div>
+            <div class="filter-pill" id="yearPill">2026 年度</div>
+          </div>
+          <div class="timeline" id="courseTimeline"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-courses">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Courses</p>
+            <h2>年度課程表</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="courseSearch" class="search-input" placeholder="搜尋主題、講師、地點..." />
+            <select id="courseStatusFilter" class="select-input">
+              <option value="all">全部狀態</option>
+              <option value="planned">未上課</option>
+              <option value="done">已完成</option>
+              <option value="cancelled">取消/延期</option>
+            </select>
+            <button class="primary-btn admin-only" data-open-form="course">新增課程</button>
+          </div>
+        </div>
+        <div class="card-grid course-grid" id="courseCards"></div>
+      </section>
+
+
+      <section class="view" id="view-media">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Media Center</p>
+            <h2>課程照片與連結管理中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="mediaSearch" class="search-input wide" placeholder="搜尋課程、檔名、照片、附件、備註..." />
+            <select id="mediaCourseFilter" class="select-input"></select>
+            <select id="mediaTypeFilter" class="select-input">
+              <option value="all">全部類型</option>
+              <option value="photo">照片</option>
+              <option value="pdf">PDF / 連結</option>
+              <option value="slide">PPT / 簡報</option>
+              <option value="video">影片</option>
+              <option value="drive">雲端資料夾</option>
+              <option value="link">一般連結</option>
+            </select>
+            <button class="ghost-btn small" id="copyMediaDigest">複製連結彙整</button>
+            <button class="ghost-btn small admin-only" id="exportMediaCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel media-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Photo Wall / Files</p>
+              <h3>每堂課的照片、影片與雲端硬碟連結集中管理</h3>
+              <p class="muted">建議檔案實際存放在 Google Drive、雲端硬碟或相簿，這裡保存可分享連結，方便會員端查看與課後回查。</p>
+            </div>
+          </div>
+          <div class="record-summary" id="mediaSummary"></div>
+        </section>
+        <section class="panel admin-only">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Add Media</p>
+              <h3>新增照片 / 連結</h3>
+            </div>
+            <span class="filter-pill">支援 Google Drive / 相簿 / PDF / PPT 連結</span>
+          </div>
+          <div class="form-grid media-form-grid">
+            <div class="form-field">
+              <label for="mediaItemCourse">課程</label>
+              <select id="mediaItemCourse" class="form-control"></select>
+            </div>
+            <div class="form-field">
+              <label for="mediaItemType">類型</label>
+              <select id="mediaItemType" class="form-control">
+                <option value="photo">照片</option>
+                <option value="pdf">PDF / 連結</option>
+                <option value="slide">PPT / 簡報</option>
+                <option value="video">影片</option>
+                <option value="drive">雲端資料夾</option>
+                <option value="link">一般連結</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="mediaItemTitle">標題</label>
+              <input id="mediaItemTitle" class="form-control" placeholder="例如：課程合照、雲端資料夾、影片連結" />
+            </div>
+            <div class="form-field full">
+              <label for="mediaItemUrl">連結</label>
+              <input id="mediaItemUrl" class="form-control" placeholder="貼上 Google Drive、相簿、PDF、PPT 或影片連結" />
+            </div>
+            <div class="form-field full">
+              <label for="mediaItemNote">備註</label>
+              <textarea id="mediaItemNote" class="form-control" rows="2" placeholder="例如：含當天上課照片、講師授權分享、僅會員內部使用"></textarea>
+            </div>
+          </div>
+          <div class="stack-actions">
+            <button class="primary-btn" id="addMediaItem">新增到本場課程</button>
+            <button class="ghost-btn" id="clearMediaForm">清空欄位</button>
+          </div>
+        </section>
+        <div id="mediaCourseGroups" class="media-course-groups"></div>
+      </section>
+
+
+
+      <section class="view" id="view-feedback">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Feedback Survey</p>
+            <h2>課程問卷回饋與滿意度統計中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <select id="feedbackCourseFilter" class="select-input"></select>
+            <select id="feedbackScoreFilter" class="select-input">
+              <option value="all">全部評分</option>
+              <option value="5">5 分高滿意</option>
+              <option value="4">4 分以上</option>
+              <option value="low">3 分以下需追蹤</option>
+              <option value="none">尚無評分</option>
+            </select>
+            <input id="feedbackSearch" class="search-input wide" placeholder="搜尋會員、課程、回饋、下次想聽題目..." />
+            <button class="ghost-btn small admin-only" id="copyFeedbackLinks">複製回饋連結</button>
+            <button class="ghost-btn small admin-only" id="exportFeedbackCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel feedback-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Course Quality</p>
+              <h3>每堂課可收集會員滿意度、講師評分、實用度與下次想聽題目</h3>
+              <p class="muted">會員填寫後可統計滿意度、講師評分、實用度與下次想聽題目。欄位已加高，手機與桌機填寫都不用在小框內滾動。</p>
+            </div>
+          </div>
+          <div class="record-summary" id="feedbackSummary"></div>
+        </section>
+        <div class="two-col feedback-layout">
+          <section class="panel feedback-form-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Member Survey</p>
+                <h3>會員課後回饋表</h3>
+              </div>
+            </div>
+            <div id="feedbackStatusBox" class="helper-box">請選擇課程與會員，或使用管理端產生的問卷連結。</div>
+            <div class="form-grid" id="feedbackFormGrid"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Insights</p>
+                <h3>回饋重點與下次題目</h3>
+              </div>
+              <button class="ghost-btn small" id="copyFeedbackDigest">複製回饋摘要</button>
+            </div>
+            <div id="feedbackInsight" class="feedback-insight"></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Responses</p>
+              <h3>問卷回饋明細</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="feedbackTable">
+              <thead>
+                <tr>
+                  <th>課程</th>
+                  <th>會員</th>
+                  <th>整體</th>
+                  <th>講師</th>
+                  <th>實用</th>
+                  <th>想再聽題目</th>
+                  <th>回饋重點</th>
+                  <th class="admin-only">操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-records">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Course Records</p>
+            <h2>課後資料中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="recordSearch" class="search-input" placeholder="搜尋課程、講師、重點、提問..." />
+            <select id="recordCategoryFilter" class="select-input">
+              <option value="all">全部主題</option>
+              <option value="疾病管理">疾病管理</option>
+              <option value="營養飼料">營養飼料</option>
+              <option value="環控設備">環控設備</option>
+              <option value="批次管理">批次管理</option>
+              <option value="產房管理">產房管理</option>
+              <option value="保育肉豬">保育肉豬</option>
+              <option value="經營管理">經營管理</option>
+              <option value="其他">其他</option>
+            </select>
+            <select id="recordStatusFilter" class="select-input">
+              <option value="all">全部紀錄</option>
+              <option value="hasRecord">已有課後紀錄</option>
+              <option value="needRecord">待補課後紀錄</option>
+              <option value="hasAttachment">已有附件連結</option>
+            </select>
+            <button class="ghost-btn small" id="clearRecordFocus">顯示全部</button>
+            <button class="ghost-btn small" data-view-jump="media">照片附件</button>
+            <button class="ghost-btn small" data-view-jump="knowledge">知識庫搜尋</button>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="helper-box">每堂課可集中保存附件 / 照片連結、課後重點、會員提問、豬場實務應用與下次追蹤事項。照片附件與知識庫搜尋改為本頁次入口，避免管理端左側欄重複。</div>
+          <div id="recordSummary" class="record-summary"></div>
+        </section>
+        <div class="record-grid" id="recordCards"></div>
+      </section>
+
+
+      <section class="view" id="view-planning">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Topic Planning</p>
+            <h2>年度課程主題規劃與缺口分析中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <select id="planningYearFilter" class="select-input"></select>
+            <select id="planningModeFilter" class="select-input">
+              <option value="all">全部主題</option>
+              <option value="gap">只看缺口</option>
+              <option value="feedback">問卷需求優先</option>
+            </select>
+            <button class="ghost-btn small" id="copyPlanningDigest">複製規劃建議</button>
+            <button class="ghost-btn small" id="exportPlanningCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel planning-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Annual Topic Balance</p>
+              <h3>年度主題安排、缺口與會員需求分區檢視</h3>
+              <p class="muted">上方先看年度總覽，下面分成主題缺口、會員想聽題目、下一季建議與每月分布，畫面不再擠在同一區塊。</p>
+            </div>
+            <span class="filter-pill">重新規劃版</span>
+          </div>
+          <div class="record-summary" id="planningSummary"></div>
+        </section>
+        <div class="two-col planning-two-col">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Gap Analysis</p>
+                <h3>主題安排缺口</h3>
+              </div>
+              <span class="filter-pill">建議每年每大類至少 1～2 堂</span>
+            </div>
+            <div class="planning-category-list" id="planningCategoryList"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Feedback Demand</p>
+                <h3>會員問卷想聽題目</h3>
+              </div>
+            </div>
+            <div id="planningFeedbackDemand" class="planning-demand-list"></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Next Quarter Suggestions</p>
+              <h3>下一季建議課程</h3>
+            </div>
+            <span class="filter-pill">可複製到 LINE 幹部群討論</span>
+          </div>
+          <div class="card-grid" id="planningSuggestions"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Monthly Distribution</p>
+              <h3>每月課程與主題分布</h3>
+            </div>
+          </div>
+          <div id="planningMonthGrid" class="planning-month-grid"></div>
+        </section>
+      </section>
+
+      <section class="view admin-only" id="view-speakers">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Speakers / Consultants</p>
+            <h2>講師 / 主辦廠商 / 課程邀約中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="speakerSearch" class="search-input wide" placeholder="搜尋講師、主辦廠商、專長、課程、邀約狀態..." />
+            <select id="speakerTypeFilter" class="select-input"></select>
+            <select id="speakerInviteStatusFilter" class="select-input">
+              <option value="all">全部邀約</option>
+              <option value="尚未邀約">尚未邀約</option>
+              <option value="洽詢中">洽詢中</option>
+              <option value="已確認">已確認</option>
+              <option value="待補資料">待補資料</option>
+              <option value="已完成">已完成</option>
+              <option value="取消">取消</option>
+            </select>
+            <button class="primary-btn small admin-only" data-open-form="speaker">新增講師</button>
+            <button class="primary-btn small admin-only" data-open-form="sponsorVendor">新增主辦廠商</button>
+            <button class="ghost-btn small admin-only" id="copySpeakerDigest">複製邀約總表</button>
+            <button class="ghost-btn small admin-only" id="exportSpeakerCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel speaker-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Speaker Database</p>
+              <h3>把講師專長、主辦廠商、聯絡窗口、支援費用、邀約狀態、講師費與課後追蹤集中管理</h3>
+              <p class="muted">頁面重新整理為三個區塊：先看講師與主辦廠商，再建立課程邀約紀錄，最後追蹤每堂課邀約狀態。</p>
+            </div>
+            <span class="filter-pill">講師 / 廠商 / 邀約分區管理</span>
+          </div>
+          <div class="record-summary" id="speakerSummary"></div>
+        </section>
+        <div class="speaker-redesign-layout">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Speaker List</p>
+                <h3>講師 / 顧問名單</h3>
+              </div>
+              <span class="filter-pill">可記錄內部聯絡資料</span>
+            </div>
+            <div class="card-grid speaker-grid" id="speakerCards"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Sponsor / Vendor List</p>
+                <h3>主辦廠商 / 協辦單位</h3>
+              </div>
+              <span class="filter-pill">可記錄廠商窗口與支援方式</span>
+            </div>
+            <div class="card-grid sponsor-grid" id="sponsorVendorCards"></div>
+          </section>
+          <section class="panel invite-form-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Invitation Record</p>
+                <h3>建立 / 更新課程邀約紀錄</h3>
+              </div>
+            </div>
+            <input type="hidden" id="inviteRecordId" />
+            <div class="form-grid">
+              <div class="form-field full">
+                <label for="inviteCourseSelect">連結課程</label>
+                <select id="inviteCourseSelect" class="form-control"></select>
+              </div>
+              <div class="form-field full">
+                <label for="inviteSpeakerSelect">講師 / 顧問</label>
+                <select id="inviteSpeakerSelect" class="form-control"></select>
+              </div>
+              <div class="form-field full">
+                <label for="inviteSponsorSelect">主辦單位 / 廠商</label>
+                <select id="inviteSponsorSelect" class="form-control"></select>
+              </div>
+              <div class="form-field">
+                <label for="inviteStatus">邀約狀態</label>
+                <select id="inviteStatus" class="form-control">
+                  <option value="尚未邀約">尚未邀約</option>
+                  <option value="洽詢中">洽詢中</option>
+                  <option value="已確認">已確認</option>
+                  <option value="待補資料">待補資料</option>
+                  <option value="已完成">已完成</option>
+                  <option value="取消">取消</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="inviteContactDate">洽詢日期</label>
+                <input id="inviteContactDate" class="form-control" type="date" />
+              </div>
+              <div class="form-field">
+                <label for="inviteConfirmDate">確認日期</label>
+                <input id="inviteConfirmDate" class="form-control" type="date" />
+              </div>
+              <div class="form-field">
+                <label for="inviteSpeakerFee">講師費 / 車馬費</label>
+                <input id="inviteSpeakerFee" class="form-control" type="number" placeholder="例如 6000" />
+              </div>
+              <div class="form-field">
+                <label for="inviteSponsorSupportType">廠商支援方式</label>
+                <select id="inviteSponsorSupportType" class="form-control">
+                  <option value="">未設定</option>
+                  <option value="主辦">主辦</option>
+                  <option value="協辦">協辦</option>
+                  <option value="贊助餐費">贊助餐費</option>
+                  <option value="贊助講師費">贊助講師費</option>
+                  <option value="提供產品資料">提供產品資料</option>
+                  <option value="提供贈品">提供贈品</option>
+                  <option value="其他">其他</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="inviteSponsorAmount">廠商支援金額 / 預算</label>
+                <input id="inviteSponsorAmount" class="form-control" type="number" placeholder="例如 6000" />
+              </div>
+              <div class="form-field full">
+                <label for="inviteSponsorNote">主辦廠商備註</label>
+                <textarea id="inviteSponsorNote" class="form-control" rows="2" placeholder="例如：主辦廠商、協辦內容、是否負擔餐費/講師費、是否提供產品資料或贈品..."></textarea>
+              </div>
+              <div class="form-field full">
+                <label for="inviteFollowUpStatus">課後追蹤事項</label>
+                <textarea id="inviteFollowUpStatus" class="form-control" rows="2" placeholder="例如：講師答應補充檢驗資料、設備比較表、案例照片..."></textarea>
+              </div>
+              <div class="form-field full">
+                <label for="inviteNote">邀約備註</label>
+                <textarea id="inviteNote" class="form-control" rows="3" placeholder="例如：已電話確認、待 LINE 回覆、需提供投影設備、課後資料是否可放會員端..."></textarea>
+              </div>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn small" id="saveInviteRecord">儲存邀約紀錄</button>
+              <button class="ghost-btn small" id="clearInviteForm">清空表單</button>
+            </div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Invitation Timeline</p>
+              <h3>課程邀約紀錄</h3>
+            </div>
+            <span class="filter-pill">可追蹤課後補充</span>
+          </div>
+          <div class="card-grid invite-grid" id="speakerInviteCards"></div>
+        </section>
+      </section>
+
+
+      <section class="view" id="view-announcements">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Announcements</p>
+            <h2>讀書會公告中心 + 重要通知置頂 + LINE 公告備份紀錄</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="announcementSearch" class="search-input wide" placeholder="搜尋公告、LINE文字、課程、停車、繳費、延期..." />
+            <select id="announcementTypeFilter" class="select-input"></select>
+            <select id="announcementStatusFilter" class="select-input">
+              <option value="all">全部狀態</option>
+              <option value="published">已發布</option>
+              <option value="draft">草稿</option>
+              <option value="archived">封存</option>
+              <option value="expired">已到期</option>
+            </select>
+            <select id="announcementCourseFilter" class="select-input"></select>
+            <button class="primary-btn small admin-only" data-open-form="announcement">新增公告</button>
+            <button class="ghost-btn small" id="copyPinnedAnnouncements">複製置頂公告</button>
+            <button class="ghost-btn small admin-only" id="exportAnnouncementsCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel announcement-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Notice Center</p>
+              <h3>課程延期、地點更換、停車提醒、繳費提醒、臨時通知與 LINE 公告集中管理</h3>
+              <p class="muted">公告可設定草稿、發布、封存、置頂與到期日。會員端只顯示已發布公告；管理端可保留 LINE 公告歷史紀錄。</p>
+            </div>
+          </div>
+          <div class="record-summary" id="announcementSummary"></div>
+        </section>
+        <div class="card-grid announcement-grid" id="announcementCards"></div>
+      </section>
+
+      <section class="view" id="view-knowledge">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Knowledge Base</p>
+            <h2>課程資料搜尋與知識庫分類中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="knowledgeSearch" class="search-input wide" placeholder="搜尋 PRRS、飼料、產房、提問、實務應用..." />
+            <select id="knowledgeCategoryFilter" class="select-input">
+              <option value="all">全部主題</option>
+              <option value="疾病管理">疾病管理</option>
+              <option value="營養飼料">營養飼料</option>
+              <option value="環控設備">環控設備</option>
+              <option value="批次管理">批次管理</option>
+              <option value="產房管理">產房管理</option>
+              <option value="保育肉豬">保育肉豬</option>
+              <option value="經營管理">經營管理</option>
+              <option value="其他">其他</option>
+            </select>
+            <select id="knowledgeTypeFilter" class="select-input">
+              <option value="all">全部內容</option>
+              <option value="content">上課內容</option>
+              <option value="afterNote">課後重點</option>
+              <option value="questionNote">會員提問</option>
+              <option value="applicationNote">實務應用</option>
+              <option value="followUpNote">追蹤事項</option>
+              <option value="attachmentLinks">附件連結</option>
+            </select>
+            <button class="ghost-btn small" id="clearKnowledgeFilters">清除篩選</button>
+            <button class="primary-btn small" id="copyKnowledgeDigest">複製重點彙整</button>
+          </div>
+        </div>
+        <section class="panel knowledge-panel">
+          <div class="helper-box">這裡會把每堂課的上課內容、課後重點、會員提問、豬場實務應用、追蹤事項與附件連結整理成可搜尋知識庫，方便日後回查讀書會累積的養豬技術資料。</div>
+          <div id="knowledgeSummary" class="record-summary"></div>
+          <div id="knowledgeCategoryCloud" class="knowledge-category-cloud"></div>
+        </section>
+        <div id="knowledgeResults" class="knowledge-results"></div>
+      </section>
+
+
+      <section class="view" id="view-report">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Annual Report</p>
+            <h2>年度報表與讀書會成效統計中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <select id="reportYearFilter" class="select-input"></select>
+            <select id="reportCategoryFilter" class="select-input">
+              <option value="all">全部主題</option>
+              <option value="疾病管理">疾病管理</option>
+              <option value="營養飼料">營養飼料</option>
+              <option value="環控設備">環控設備</option>
+              <option value="批次管理">批次管理</option>
+              <option value="產房管理">產房管理</option>
+              <option value="保育肉豬">保育肉豬</option>
+              <option value="經營管理">經營管理</option>
+              <option value="其他">其他</option>
+            </select>
+            <button class="primary-btn small" id="copyAnnualReport">複製年度報告</button>
+            <button class="ghost-btn small" id="exportReportCsv">匯出 CSV</button>
+            <button class="ghost-btn small" id="printAnnualReport">列印 / PDF</button>
+          </div>
+        </div>
+        <section class="panel report-hero-panel" id="annualReportPrintArea">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Report Summary</p>
+              <h3 id="reportTitle">年度成效總覽</h3>
+            </div>
+            <span class="filter-pill" id="reportGeneratedAt">即時統計</span>
+          </div>
+          <div class="helper-box">這裡會把年度課程數、主題比例、會員出席率、課程紀錄完成率、參加人次、餐費收支與每月課程分布整理成報表，可直接複製貼到 LINE、年度會議紀錄或列印成 PDF。</div>
+          <div class="report-kpis" id="reportKpis"></div>
+        </section>
+        <div class="two-col report-layout">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Category Mix</p>
+                <h3>主題比例與紀錄完成率</h3>
+              </div>
+            </div>
+            <div id="reportCategoryBars" class="report-bars"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Monthly Trend</p>
+                <h3>每月課程與參加人次</h3>
+              </div>
+            </div>
+            <div id="reportMonthlyBars" class="report-bars monthly-bars"></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Member Attendance</p>
+              <h3>會員年度出席率</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="reportMemberTable">
+              <thead>
+                <tr>
+                  <th>會員</th>
+                  <th>身份 / 組別</th>
+                  <th>出席</th>
+                  <th>請假</th>
+                  <th>未回覆</th>
+                  <th>出席率</th>
+                  <th>未收餐費</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Course List</p>
+              <h3>年度課程明細</h3>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="reportCourseTable">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>課程</th>
+                  <th>主題</th>
+                  <th>參加人數</th>
+                  <th>紀錄狀態</th>
+                  <th>餐費應收 / 未收</th>
+                  <th>地點</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+
+      <section class="view" id="view-prep">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Prep Tasks</p>
+            <h2>幹部工作分派與課前準備清單</h2>
+          </div>
+          <div class="toolbar-actions">
+            <select id="prepCourseFilter" class="select-input"></select>
+            <select id="prepStatusFilter" class="select-input">
+              <option value="all">全部狀態</option>
+              <option value="todo">待處理</option>
+              <option value="doing">進行中</option>
+              <option value="done">已完成</option>
+              <option value="blocked">卡住/需協助</option>
+              <option value="overdue">已逾期</option>
+            </select>
+            <input id="prepSearch" class="search-input" placeholder="搜尋負責人、工作、備註..." />
+            <button class="primary-btn small admin-only" id="addPrepTaskTop">新增任務</button>
+            <button class="ghost-btn small admin-only" id="copyPrepDigest">複製總清單</button>
+            <button class="ghost-btn small admin-only" id="exportPrepCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel prep-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Course Preparation</p>
+              <h3>每場課前準備與幹部分工</h3>
+            </div>
+            <span class="filter-pill" id="prepGeneratedAt">即時更新</span>
+          </div>
+          <div class="helper-box">可針對每一場讀書會指定幹部負責訂餐廳、確認講師、通知會員、出席催覆、準備投影設備、停車提醒、收費與課後紀錄。建議每場課至少套用一次「標準清單」，再依實際情況調整。</div>
+          <div class="report-kpis" id="prepKpis"></div>
+        </section>
+        <div id="prepCourseCards" class="prep-course-list"></div>
+      </section>
+
+      <section class="view admin-only" id="view-groups">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Officer Roster</p>
+            <h2>幹部名單</h2>
+          </div>
+          <div class="toolbar-actions">
+            <select id="groupCourseFilter" class="select-input"></select>
+            <select id="groupNameFilter" class="select-input"></select>
+            <select id="groupStatusFilter" class="select-input">
+              <option value="all">全部會員</option>
+              <option value="needReply">未回覆</option>
+              <option value="going">會出席</option>
+              <option value="leave">請假</option>
+              <option value="needCollect">未收餐費</option>
+              <option value="paid">已收餐費</option>
+            </select>
+            <input id="groupSearch" class="search-input" placeholder="搜尋組員、組長、電話、LINE..." />
+            <button class="primary-btn small admin-only" data-open-form="member">新增幹部</button>
+            <button class="ghost-btn small admin-only" id="copyGroupDigest">複製組別通知</button>
+            <button class="ghost-btn small admin-only" id="exportGroupCsv">匯出 CSV</button>
+          </div>
+        </div>
+        <section class="panel group-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Selected Course</p>
+              <h3 id="groupCourseHint">尚未選擇課程</h3>
+            </div>
+            <span class="filter-pill">依會員組別快速通知</span>
+          </div>
+          <div class="helper-box">此頁先作為幹部名單管理，再依會員組別整理通知責任區。幹部可直接新增、編輯，分組區則用來複製課前通知、未回覆催覆與未繳費提醒。</div>
+          <div class="report-kpis" id="groupKpis"></div>
+        </section>
+        <div id="groupCards" class="group-card-list"></div>
+      </section>
+
+      <section class="view" id="view-members">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Members</p>
+            <h2>會員 / 牧場名單</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="memberSearch" class="search-input" placeholder="搜尋牧場、姓名、地區、專長..." />
+            <select id="memberRoleFilter" class="select-input">
+              <option value="all">全部身份</option>
+              <option value="會長">會長</option>
+              <option value="副會長">副會長</option>
+              <option value="組長">組長</option>
+              <option value="會員">會員</option>
+              <option value="講師/顧問">講師/顧問</option>
+            </select>
+            <select id="memberStatusFilter" class="select-input">
+              <option value="active">正常會員</option>
+              <option value="all">全部狀態</option>
+              <option value="正常">正常</option>
+              <option value="暫停">暫停</option>
+              <option value="退會">退會</option>
+              <option value="不列入年度會費">不列入年度會費</option>
+            </select>
+            <button class="primary-btn admin-only" data-open-form="member">新增會員</button>
+          </div>
+        </div>
+        <div class="member-list-host" id="memberCards"></div>
+      </section>
+
+      <section class="view admin-only" id="view-retired-members">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Retired Members</p>
+            <h2>退會會員名單</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="retiredMemberSearch" class="search-input" placeholder="搜尋退會會員、牧場、姓名、備註..." />
+            <button class="ghost-btn admin-only" data-view-jump="members">回會員名單</button>
+            <button class="primary-btn admin-only" data-open-form="member">新增會員</button>
+          </div>
+        </div>
+        <div class="member-list-host" id="retiredMemberCards"></div>
+      </section>
+
+      <section class="view" id="view-locations">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Locations</p>
+            <h2>餐廳與上課地點資料庫</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="locationSearch" class="search-input" placeholder="搜尋餐廳、地址、停車..." />
+            <button class="primary-btn admin-only" data-open-form="location">新增地點</button>
+          </div>
+        </div>
+        <div class="card-grid location-grid" id="locationCards"></div>
+      </section>
+
+      <section class="view" id="view-attendance">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Attendance</p>
+            <h2>出席與請假統計</h2>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="attendance-summary-grid" id="attendanceSummaryGrid"></div>
+          <div class="table-wrap">
+            <table class="data-table" id="attendanceTable">
+              <thead>
+                <tr>
+                  <th>課程日期</th>
+                  <th>課程主題</th>
+                  <th>總估算人數</th>
+                  <th>會員名單會出席</th>
+                  <th>牧場/姓名登記</th>
+                  <th>請假/不參加</th>
+                  <th>未回覆/未確定</th>
+                  <th>會員名單出席率 / 最後更新</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="attendance-reply-details" id="attendanceReplyDetails"></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-finance">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Fee Settlement</p>
+            <h2>會員出席費用與餐費結算中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <input id="financeSearch" class="search-input" placeholder="搜尋課程、地點、備註..." />
+            <select id="financeStatusFilter" class="select-input">
+              <option value="all">全部結算</option>
+              <option value="unpaid">尚有未收</option>
+              <option value="settled">已結清</option>
+              <option value="noFee">未設定餐費</option>
+            </select>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="helper-box">每堂課可設定每人餐費、實際參加人數、本場應收總額、其他費用，並逐位會員記錄已收 / 未收、收款方式與備註。建議課後先確認實際參加人數，再進入結算管理。</div>
+          <div id="financeSummary" class="record-summary"></div>
+        </section>
+        <section class="panel">
+          <div class="table-wrap">
+            <table class="data-table" id="financeTable">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>課程 / 地點</th>
+                  <th>參加人數</th>
+                  <th>每人餐費</th>
+                  <th>應收</th>
+                  <th>已收</th>
+                  <th>未收</th>
+                  <th>狀態</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view admin-only" id="view-annual-fees">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Annual Membership Fee</p>
+            <h2>年度會費管理</h2>
+            <p class="muted">年度會費與課程餐費分開管理，可依會員 / 牧場名單建立每年度應收名單。</p>
+          </div>
+          <div class="toolbar-actions">
+            <select id="annualFeeYearSelect" class="select-input"></select>
+            <input id="annualFeeSearch" class="search-input" placeholder="搜尋牧場、姓名、狀態..." />
+            <select id="annualFeeStatusFilter" class="select-input">
+              <option value="all">全部狀態</option>
+              <option value="unpaid">未繳</option>
+              <option value="partial">部分繳費</option>
+              <option value="paid">已繳清</option>
+              <option value="free">免收</option>
+              <option value="excluded">不列入</option>
+            </select>
+          </div>
+        </div>
+        <section class="panel annual-fee-control-panel">
+          <div class="form-grid annual-fee-setting-grid">
+            <div class="form-field">
+              <label for="annualFeeYearInput">年度</label>
+              <input id="annualFeeYearInput" class="form-control" type="number" min="2024" max="2100" />
+            </div>
+            <div class="form-field">
+              <label for="annualFeeDefaultAmount">一般會員年度會費</label>
+              <input id="annualFeeDefaultAmount" class="form-control" type="number" min="0" step="1" placeholder="例如 1000" />
+            </div>
+            <div class="form-field full">
+              <label for="annualFeeNote">年度會費備註</label>
+              <textarea id="annualFeeNote" class="form-control" rows="2" placeholder="例如：山線養豬讀書會年度會費"></textarea>
+            </div>
+          </div>
+          <div class="stack-actions">
+            <button class="primary-btn" id="createAnnualFeeList">建立 / 更新本年度會費名單</button>
+            <button class="ghost-btn" id="addMissingAnnualFeeMembers">補上新增會員</button>
+            <button class="primary-btn" id="saveAnnualFeePage">儲存會費資料</button>
+            <button class="ghost-btn" id="printAnnualFeeSheet">列印收款表</button>
+            <button class="ghost-btn" id="exportAnnualFeeCsv">匯出 CSV</button>
+            <button class="ghost-btn" id="copyAnnualFeeReminder">複製未繳 LINE 文字</button>
+          </div>
+        </section>
+        <section class="panel">
+          <div id="annualFeeSummary" class="record-summary"></div>
+          <div class="helper-box">建議先設定年度與一般會員會費，再按「建立 / 更新本年度會費名單」。之後可逐位登錄已收、免收或不列入。</div>
+          <div class="table-wrap">
+            <table class="data-table annual-fee-table" id="annualFeeTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>畜牧場名稱</th>
+                  <th>會員姓名</th>
+                  <th>身份</th>
+                  <th>應收</th>
+                  <th>已收</th>
+                  <th>狀態</th>
+                  <th>收款日期</th>
+                  <th>方式</th>
+                  <th>備註</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view member-only" id="view-reply">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Member Reply</p>
+            <h2>會員出席回覆</h2>
+          </div>
+        </div>
+        <section class="panel reply-panel">
+          <div id="replyStatusBox" class="helper-box">一般會員使用 LINE 群組共用報名連結，自行填寫牧場名稱 / 姓名與參加人數。</div>
+          <div class="form-grid" id="replyFormGrid"></div>
+        </section>
+      </section>
+
+
+      <section class="view admin-only" id="view-notify">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">LINE Notice</p>
+            <h2>課程提醒與 LINE 通知文字產生器</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn" id="copyNotifyText">複製通知文字</button>
+            <button class="ghost-btn" id="copyNotifyLinks">複製會員回覆連結</button>
+          </div>
+        </div>
+        <div class="two-col notify-layout">
+          <section class="panel">
+            <h3>通知設定</h3>
+            <p class="muted">選擇課程與通知情境後，系統會自動組成可貼到 LINE 群組的文字。實際 LINE 發送仍由你手動貼上，避免誤發。</p>
+            <div class="form-grid compact-form">
+              <div class="form-field full">
+                <label for="notifyCourseSelect">選擇課程</label>
+                <select id="notifyCourseSelect" class="form-control"></select>
+              </div>
+              <div class="form-field">
+                <label for="notifyPreset">通知情境</label>
+                <select id="notifyPreset" class="form-control">
+                  <option value="initial">正式課程通知</option>
+                  <option value="before">課前提醒</option>
+                  <option value="today">當天提醒</option>
+                  <option value="attendance">出席回覆催覆</option>
+                  <option value="after">課後重點與附件</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="notifyAudience">通知對象</label>
+                <select id="notifyAudience" class="form-control">
+                  <option value="group">LINE 群組</option>
+                  <option value="officers">幹部 / 組長</option>
+                  <option value="unreplied">未回覆會員</option>
+                  <option value="attendees">已確認出席會員</option>
+                </select>
+              </div>
+              <div class="form-field full">
+                <label for="notifyExtraNote">額外補充文字</label>
+                <textarea id="notifyExtraNote" class="form-control" placeholder="例如：請各組長協助確認出席人數、餐廳需提前訂位、停車位有限請提早到。"></textarea>
+              </div>
+            </div>
+            <div class="notify-options">
+              <label><input type="checkbox" id="notifyIncludeMap" checked> Google 地圖</label>
+              <label><input type="checkbox" id="notifyIncludeParking" checked> 停車資訊</label>
+              <label><input type="checkbox" id="notifyIncludeFee" checked> 餐費資訊</label>
+              <label><input type="checkbox" id="notifyIncludeStats" checked> 出席統計</label>
+              <label><input type="checkbox" id="notifyIncludeContent" checked> 上課內容</label>
+              <label><input type="checkbox" id="notifyIncludeLinks"> 附上共用報名連結</label>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn" id="refreshNotifyText">重新產生通知</button>
+              <button class="ghost-btn" id="copyNotifyUnreplied">複製未回覆名單</button>
+              <button class="ghost-btn" id="openLineShare">開啟 LINE 分享</button>
+            </div>
+            <div class="helper-box">建議做法：群組公告貼「通知文字」，會員個人連結可另外貼一則，或由組長私訊各會員。若怕 LINE 訊息太長，可以不要勾選「附上共用報名連結」。</div>
+          </section>
+          <section class="panel notify-output-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Generated Message</p>
+                <h3>可複製 LINE 文字</h3>
+              </div>
+              <span class="filter-pill" id="notifyLengthPill">0 字</span>
+            </div>
+            <textarea id="notifyOutput" class="form-control notify-output" readonly></textarea>
+            <div id="notifySummary" class="notify-summary"></div>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="view admin-only" id="view-share-card">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">LINE Share Card</p>
+            <h2>LINE 公告 / 分享卡 / 報名連結</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn" id="copyShareCardText">複製分享卡文字</button>
+            <button class="ghost-btn" id="copyShareCardCompact">複製精簡版</button>
+            <button class="ghost-btn" id="openShareCardLine">開啟 LINE 分享</button>
+            <button class="ghost-btn admin-only" data-view-jump="notify">進階通知產生器</button>
+            <button class="ghost-btn admin-only" data-view-jump="share">公開連結中心</button>
+          </div>
+        </div>
+        <div class="two-col share-card-layout">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Card Settings</p>
+                <h3>單場課程公告設定</h3>
+                <p class="muted">此頁已作為管理端主要 LINE 入口：單場課程公告、報名連結、簽到連結與公開頁連結都集中在這裡。較細的通知情境與全部公開連結，改放在上方次入口。</p>
+              </div>
+              <span class="filter-pill">欄位加高版</span>
+            </div>
+            <div class="form-grid compact-form">
+              <div class="form-field full">
+                <label for="shareCardCourseSelect">選擇課程</label>
+                <select id="shareCardCourseSelect" class="form-control"></select>
+              </div>
+              <div class="form-field">
+                <label for="shareCardTemplate">公告版型</label>
+                <select id="shareCardTemplate" class="form-control">
+                  <option value="formal">正式公告版</option>
+                  <option value="compact">精簡提醒版</option>
+                  <option value="parking">地點停車版</option>
+                  <option value="payment">餐費統計版</option>
+                  <option value="after">課後成果版</option>
+                  <option value="officer">幹部確認版</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="shareCardTone">語氣</label>
+                <select id="shareCardTone" class="form-control">
+                  <option value="friendly">親切提醒</option>
+                  <option value="formal">正式清楚</option>
+                  <option value="urgent">重要提醒</option>
+                </select>
+              </div>
+              <div class="form-field full">
+                <label for="shareCardExtraNote">額外補充</label>
+                <textarea id="shareCardExtraNote" class="form-control" placeholder="例如：請各組長協助確認名單、停車位有限請共乘、餐廳需提早統計桌數。"></textarea>
+              </div>
+            </div>
+            <div class="notify-options share-card-options">
+              <label><input type="checkbox" id="shareCardIncludeMap" checked> Google 地圖</label>
+              <label><input type="checkbox" id="shareCardIncludeParking" checked> 停車資訊</label>
+              <label><input type="checkbox" id="shareCardIncludeFee" checked> 餐費資訊</label>
+              <label><input type="checkbox" id="shareCardIncludeStats" checked> 出席統計</label>
+              <label><input type="checkbox" id="shareCardIncludeContent" checked> 上課內容</label>
+              <label><input type="checkbox" id="shareCardIncludeReply" checked> 出席回覆連結</label>
+              <label><input type="checkbox" id="shareCardIncludeCheckin"> 簽到連結</label>
+              <label><input type="checkbox" id="shareCardIncludePublic" checked> 會員公開頁</label>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn" id="refreshShareCard">重新產生分享卡</button>
+              <button class="ghost-btn" id="copyShareCardOfficer">複製幹部確認清單</button>
+              <button class="ghost-btn" id="copyShareCardLinks">複製本場常用連結</button>
+            </div>
+            <div class="helper-box">LINE 不支援真正的圖片卡片由網頁直接貼入，因此本頁提供「可讀性較高的文字分享卡」與「畫面預覽卡」。若要做成圖片，可用瀏覽器或手機截圖預覽卡片後貼到 LINE。</div>
+          </section>
+          <section class="panel share-card-preview-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Preview</p>
+                <h3>單場課程分享卡預覽</h3>
+              </div>
+              <span class="filter-pill" id="shareCardLengthPill">0 字</span>
+            </div>
+            <div id="shareCardMemberSignupBox" class="member-signup-link-box"></div>
+            <div id="courseShareCardPreview" class="course-share-card-preview"></div>
+            <div class="share-output-label">LINE 群組實際貼文內容（複製後貼到 LINE）</div>
+            <textarea id="shareCardOutput" class="form-control notify-output share-card-output" readonly></textarea>
+            <div id="shareCardSummary" class="notify-summary"></div>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="view admin-only" id="view-import">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Batch Import</p>
+            <h2>會員資料匯入模板 + CSV 批次匯入中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn small" id="downloadMemberTemplate">下載會員 CSV 模板</button>
+            <button class="ghost-btn small" id="exportMembersCsv">匯出目前會員 CSV</button>
+          </div>
+        </div>
+        <section class="panel import-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Import Guide</p>
+              <h3>一次匯入會長、組長、會員、電話、LINE、組別與豬場資料</h3>
+            </div>
+            <span class="filter-pill">建議使用 UTF-8 CSV</span>
+          </div>
+          <div class="helper-box">本頁用於大量建立會員名錄。可先下載模板，用 Excel 填寫後另存為 <strong>CSV UTF-8</strong> 再匯入；若用本包附的 Excel 模板，請填寫「會員匯入模板」工作表後另存 CSV。系統會先預覽，不會直接覆蓋資料。</div>
+          <div class="report-kpis" id="importKpis"></div>
+        </section>
+        <div class="two-col import-layout">
+          <section class="panel">
+            <h3>1. 選擇或貼上 CSV</h3>
+            <div class="stack-actions">
+              <label class="file-btn">
+                選擇 CSV 檔案
+                <input type="file" id="importMemberCsv" accept=".csv,text/csv" />
+              </label>
+              <a class="ghost-link" href="templates/member_import_template.csv" download>下載範例 CSV</a>
+              <a class="ghost-link" href="templates/member_import_template.xlsx" download>下載 Excel 模板</a>
+            </div>
+            <div class="form-grid compact-form">
+              <div class="form-field full">
+                <label for="memberCsvPaste">或直接貼上 CSV 內容</label>
+                <textarea id="memberCsvPaste" class="form-control csv-paste" placeholder="姓名,身份,組別,豬場名稱,地區,飼養型態,飼養規模,專長,電話,LINE_ID,簡介,顯示權限,會員Token"></textarea>
+              </div>
+              <div class="form-field">
+                <label for="memberImportDuplicateMode">重複資料處理</label>
+                <select id="memberImportDuplicateMode" class="form-control">
+                  <option value="update">找到相同 Token / 姓名電話時更新原資料</option>
+                  <option value="skip">找到重複時略過</option>
+                  <option value="new">全部視為新會員新增</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="memberImportDefaultVisibility">預設顯示權限</label>
+                <select id="memberImportDefaultVisibility" class="form-control">
+                  <option value="會員可見">會員可見</option>
+                  <option value="僅管理端">僅管理端</option>
+                  <option value="公開">公開</option>
+                </select>
+              </div>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn" id="previewMemberImport">預覽匯入</button>
+              <button class="ghost-btn" id="clearMemberImport">清除預覽</button>
+              <button class="danger-btn" id="executeMemberImport" disabled>確認匯入 / 更新</button>
+            </div>
+            <div class="helper-box small-text">必要欄位只有「姓名」。身份若空白會自動設為會員；組別若空白會歸為未分組；Token 為舊版個人連結保留欄位，可空白自動產生；一般報名已改用共用連結。電話、LINE、豬場名稱可依隱私需求留白。</div>
+          </section>
+          <section class="panel">
+            <h3>2. 欄位格式</h3>
+            <div class="table-wrap mini-table-wrap">
+              <table class="data-table compact-table">
+                <thead>
+                  <tr><th>欄位</th><th>說明</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>姓名</td><td>必填，會員卡顯示名稱。</td></tr>
+                  <tr><td>身份</td><td>會長、副會長、組長、會員、講師/顧問。</td></tr>
+                  <tr><td>組別</td><td>例如 幹部、第一組、山線組。</td></tr>
+                  <tr><td>豬場名稱</td><td>可填可不填，依隱私需求決定。</td></tr>
+                  <tr><td>地區</td><td>只建議填縣市鄉鎮，不建議填完整地址。</td></tr>
+                  <tr><td>飼養型態</td><td>母豬場、一貫場、肉豬場、自配料等。</td></tr>
+                  <tr><td>電話 / LINE_ID</td><td>方便組長通知，會員端可依權限隱藏。</td></tr>
+                  <tr><td>會員Token</td><td>舊版個人連結保留欄位；一般會員報名改用 LINE 群組共用報名連結。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Preview</p>
+              <h3>匯入預覽</h3>
+            </div>
+            <span class="filter-pill" id="importPreviewPill">尚未預覽</span>
+          </div>
+          <div id="memberImportMessage" class="sync-status">請先選擇 CSV 或貼上內容，再按「預覽匯入」。</div>
+          <div class="table-wrap">
+            <table class="data-table" id="memberImportPreviewTable">
+              <thead>
+                <tr>
+                  <th>動作</th>
+                  <th>姓名</th>
+                  <th>身份</th>
+                  <th>組別</th>
+                  <th>地區</th>
+                  <th>電話</th>
+                  <th>LINE</th>
+                  <th>Token</th>
+                  <th>備註</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+
+      <section class="view admin-only" id="view-course-import">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Course Batch Import</p>
+            <h2>年度課程表 Excel / CSV 批次匯入中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn small" id="downloadCourseTemplate">下載課程 CSV 模板</button>
+            <button class="ghost-btn small" id="exportCoursesCsv">匯出目前課程 CSV</button>
+          </div>
+        </div>
+        <section class="panel import-hero-panel course-import-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Import Guide</p>
+              <h3>一次匯入整年度課程、時間、講師、餐廳、Google 地圖、停車資訊與餐費</h3>
+            </div>
+            <span class="filter-pill">支援民國日期 / 西元日期</span>
+          </div>
+          <div class="helper-box">本頁用於大量建立年度課表。可先下載模板，用 Excel 填寫後另存為 <strong>CSV UTF-8</strong> 再匯入；系統會先預覽，並可依「課程ID」或「日期＋課程主題」判斷更新、略過或新增。地點不存在時，也可自動建立餐廳地點資料。</div>
+          <div class="report-kpis" id="courseImportKpis"></div>
+        </section>
+        <div class="two-col import-layout">
+          <section class="panel">
+            <h3>1. 選擇或貼上年度課程 CSV</h3>
+            <div class="stack-actions">
+              <label class="file-btn">
+                選擇 CSV 檔案
+                <input type="file" id="importCourseCsv" accept=".csv,text/csv" />
+              </label>
+              <a class="ghost-link" href="templates/course_import_template.csv" download>下載範例 CSV</a>
+              <a class="ghost-link" href="templates/course_import_template.xlsx" download>下載 Excel 模板</a>
+            </div>
+            <div class="form-grid compact-form">
+              <div class="form-field full">
+                <label for="courseCsvPaste">或直接貼上 CSV 內容</label>
+                <textarea id="courseCsvPaste" class="form-control csv-paste" placeholder="年度,日期,星期,開始時間,結束時間,課程主題,講師,主辦廠商,聯絡窗口,主題分類,地點名稱,餐廳地址,Google地圖連結,停車狀態,停車說明,每人餐費,參加人數,本場應收總額,其他費用,上課內容,附件連結,照片連結,課程狀態,課程ID"></textarea>
+              </div>
+              <div class="form-field">
+                <label for="courseImportDuplicateMode">重複課程處理</label>
+                <select id="courseImportDuplicateMode" class="form-control">
+                  <option value="update">相同課程ID / 日期主題時更新原資料</option>
+                  <option value="skip">找到重複時略過</option>
+                  <option value="new">全部視為新課程新增</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="courseImportLocationMode">地點資料處理</label>
+                <select id="courseImportLocationMode" class="form-control">
+                  <option value="createUpdate">自動新增 / 更新餐廳地點</option>
+                  <option value="createOnly">地點不存在才新增，既有地點不更新</option>
+                  <option value="neverCreate">不自動建立地點</option>
+                </select>
+              </div>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn" id="previewCourseImport">預覽匯入</button>
+              <button class="ghost-btn" id="clearCourseImport">清除預覽</button>
+              <button class="danger-btn" id="executeCourseImport" disabled>確認匯入 / 更新</button>
+            </div>
+            <div class="helper-box small-text">必要欄位為「課程主題」。建議同時填寫日期、開始時間、地點名稱、講師與餐費。日期可填 2026-09-18 或 115/09/18；系統會自動轉為西元格式。</div>
+          </section>
+          <section class="panel">
+            <h3>2. 欄位格式</h3>
+            <div class="table-wrap mini-table-wrap">
+              <table class="data-table compact-table">
+                <thead><tr><th>欄位</th><th>說明</th></tr></thead>
+                <tbody>
+                  <tr><td>年度 / 日期</td><td>年度可空白，由日期自動判斷；民國 115/09/18 會轉成 2026-09-18。</td></tr>
+                  <tr><td>課程主題</td><td>必填，作為課程卡片與重複判斷依據。</td></tr>
+                  <tr><td>主題分類</td><td>疾病管理、營養飼料、環控設備、批次管理、產房管理、保育肉豬、經營管理、其他。</td></tr>
+                  <tr><td>地點名稱 / 地址 / Google地圖</td><td>可自動新增到餐廳地點資料庫，方便下次沿用。</td></tr>
+                  <tr><td>停車狀態 / 停車說明</td><td>停車狀態建議填：有、無、路邊停車、收費停車場、未確認。</td></tr>
+                  <tr><td>每人餐費 / 參加人數</td><td>匯入後會進入費用結算與年度報表統計。</td></tr>
+                  <tr><td>課程ID</td><td>可空白。若匯出後再修改重匯，可保留課程ID以精準更新。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Preview</p>
+              <h3>年度課程匯入預覽</h3>
+            </div>
+            <span class="filter-pill" id="courseImportPreviewPill">尚未預覽</span>
+          </div>
+          <div id="courseImportMessage" class="sync-status">請先選擇年度課程 CSV 或貼上內容，再按「預覽匯入」。</div>
+          <div class="table-wrap">
+            <table class="data-table" id="courseImportPreviewTable">
+              <thead>
+                <tr>
+                  <th>動作</th><th>日期</th><th>時間</th><th>課程主題</th><th>講師</th><th>分類</th><th>地點</th><th>人數</th><th>狀態</th><th>地點處理</th><th>備註</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-checkin">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Check-in</p>
+            <h2>課程簽到 / 直接報到 / QR Code</h2>
+          </div>
+          <div class="toolbar-actions admin-only">
+            <select id="checkinCourseSelect" class="select-input"></select>
+          </div>
+        </div>
+        <section class="panel checkin-hero-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Course Check-in</p>
+              <h3 id="checkinCourseTitle">尚未選擇課程</h3>
+              <p class="muted" id="checkinCourseMeta">請先建立課程或選擇課程。</p>
+            </div>
+          </div>
+          <div class="report-kpis" id="checkinKpis"></div>
+        </section>
+        <section class="panel" id="checkinPublicBox"></section>
+        <section class="panel admin-only">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Roster</p>
+              <h3>現場報到名單</h3>
+            </div>
+            <span class="filter-pill">可列印 / 匯出 CSV</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="checkinMemberTable">
+              <thead>
+                <tr>
+                  <th>會員</th>
+                  <th>預定出席</th>
+                  <th>報到狀態</th>
+                  <th>報到時間</th>
+                  <th>備註</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="view admin-only" id="view-sync">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Cloud Sync</p>
+            <h2>Google Sheet 雲端同步</h2>
+          </div>
+        </div>
+        <div class="two-col">
+          <section class="panel">
+            <h3>同步設定</h3>
+            <p class="muted">將 Apps Script Web App URL 貼在這裡。管理端設定一次後，系統產生的 LINE 報名連結會自動帶入同步設定；會員不用輸入 Apps Script URL，就能送出參加 / 請假資料並回寫 Google Sheet。</p>
+            <div class="form-grid sync-form">
+              <div class="form-field full">
+                <label for="syncUrl">Apps Script Web App URL</label>
+                <input id="syncUrl" class="form-control" placeholder="https://script.google.com/macros/s/.../exec" value="https://script.google.com/macros/s/AKfycbzJwB9GqSf4TQNRHyX0RoFTD2QvQjJas_ZId7MiFmJ6wVvUAWZ7CEOdRlGx53KfojGd/exec" />
+              </div>
+              <div class="form-field">
+                <label for="adminToken">管理端 Admin Token</label>
+                <input id="adminToken" class="form-control" placeholder="例如：shanxian_admin_2026" />
+              </div>
+              <div class="form-field">
+                <label for="readToken">會員端讀取 Token</label>
+                <input id="readToken" class="form-control" placeholder="例如：shanxian_read_2026" />
+              </div>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-btn" id="saveSyncSettings">儲存同步設定</button>
+              <button class="ghost-btn" id="testSync">測試連線</button>
+              <button class="ghost-btn" id="pullCloud">從雲端下載</button>
+              <button class="primary-btn" id="pushCloud">上傳到雲端</button>
+            </div>
+            <div class="sync-status" id="syncStatus">尚未同步。</div>
+            <div class="auto-sync-options">
+              <label><input type="checkbox" id="autoUploadCloud" checked /> 資料更新後自動上傳雲端</label>
+              <label><input type="checkbox" id="autoDownloadCloud" checked /> 自動下載雲端最新資料</label>
+              <label>自動下載間隔
+                <select id="autoDownloadIntervalMs" class="form-control small-select">
+                  <option value="30000">30 秒</option>
+                  <option value="60000">1 分鐘</option>
+                  <option value="90000" selected>1.5 分鐘</option>
+                  <option value="180000">3 分鐘</option>
+                  <option value="300000">5 分鐘</option>
+                </select>
+              </label>
+            </div>
+          </section>
+          <section class="panel">
+            <h3>Google Sheet 使用流程</h3>
+            <ol class="clean-list">
+              <li>建立一個 Google Sheet。</li>
+              <li>開啟「擴充功能 → Apps Script」。</li>
+              <li>貼上本包的 <strong>APPS_SCRIPT_CODE.gs</strong>。</li>
+              <li>設定 ADMIN_TOKEN 與 READ_TOKEN。</li>
+              <li>管理端儲存 Web App URL 後，到「LINE 公告 / 分享卡」複製共用 LINE 報名連結。</li>
+              <li>會員點 LINE 連結後，系統會自動讀取 Google Sheet 最新課程資料，送出後直接回寫 participantSignup。</li>
+              <li>部署為 Web App，執行身分選自己，存取權可選知道連結者。</li>
+              <li>把 Web App URL 貼回本頁。</li>
+            </ol>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="view admin-only" id="view-share">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Public Share</p>
+            <h2>會員端公開頁面與分享連結</h2>
+            <p class="muted">這裡集中產生可分享給一般會員的連結。會員端只會看到課表、公告、餐廳地點、出席回覆、簽到報到與照片附件，不會看到管理、費用、匯入、同步與幹部資料。</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn admin-only" id="copyMemberPublicDigest">複製全部分享連結</button>
+          </div>
+        </div>
+        <section class="panel public-share-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Member Public Mode</p>
+              <h3>會員端精簡版入口</h3>
+            </div>
+          </div>
+          <div class="helper-box">
+            建議把「會員端首頁」或「年度課表」貼到 LINE 群組置頂。若是單場課程通知，可使用下一堂課的出席回覆、簽到報到與照片附件連結。
+          </div>
+          <div class="share-link-grid" id="publicShareLinks"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Next Course Links</p>
+              <h3>下一堂課快速分享</h3>
+            </div>
+          </div>
+          <div id="nextCourseShareBox" class="share-link-grid"></div>
+        </section>
+      </section>
+
+
+      <section class="view admin-only" id="view-backup">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Backup Restore Center</p>
+            <h2>資料備份與版本還原中心</h2>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn" id="createManualBackup">建立手動備份</button>
+            <button class="ghost-btn" id="exportBackupList">匯出備份清單</button>
+            <button class="ghost-btn" data-view-jump="data">進階 JSON 資料管理</button>
+            <button class="danger-btn" id="clearAutoBackups">清除自動備份</button>
+          </div>
+        </div>
+        <div class="helper-box" id="backupLatestBox">讀取備份狀態中...</div>
+        <div class="kpi-grid" id="backupKpis"></div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Version History</p>
+              <h3>版本紀錄</h3>
+            </div>
+          </div>
+          <div class="filter-grid">
+            <label>搜尋備份
+              <input id="backupSearch" type="search" placeholder="搜尋備份名稱、類型、時間" />
+            </label>
+            <label>備份類型
+              <select id="backupTypeFilter">
+                <option value="all">全部類型</option>
+                <option value="auto">自動備份</option>
+                <option value="manual">手動備份</option>
+                <option value="import">匯入前備份</option>
+                <option value="reset">重置前備份</option>
+                <option value="cloud">雲端覆蓋前備份</option>
+              </select>
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table backup-table">
+              <thead>
+                <tr>
+                  <th>備份名稱</th>
+                  <th>類型</th>
+                  <th>時間</th>
+                  <th>資料量</th>
+                  <th>課程狀態</th>
+                  <th>容量</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="backupTable"></tbody>
+            </table>
+          </div>
+        </section>
+        <div class="two-col">
+          <section class="panel">
+            <h3>這個功能會保護哪些資料？</h3>
+            <ul class="clean-list">
+              <li>會員名錄、組別、Token 與會員資料。</li>
+              <li>年度課程表、地點、停車、餐費、出席與簽到。</li>
+              <li>課程紀錄、附件照片、問卷回饋、公告與 LINE 分享資料。</li>
+              <li>講師顧問、邀約紀錄、幹部任務、組別責任區與年度報表相關資料。</li>
+            </ul>
+          </section>
+          <section class="panel">
+            <h3>建議使用方式</h3>
+            <div class="notice-list">
+              <div class="notice">大量匯入會員或課程前，先按「建立手動備份」。</div>
+              <div class="notice">從 Google Sheet 下載覆蓋前，系統會先建立「雲端覆蓋前備份」。</div>
+              <div class="notice">若資料誤刪，可在版本紀錄按「還原」，系統會先保存一份還原前備份再覆蓋。</div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+
+      <section class="view admin-only" id="view-settings">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">System Settings</p>
+            <h2>系統設定中心</h2>
+            <p class="muted">集中管理管理端密碼、會員端公開模式、GitHub Pages 網址、Google Sheet URL、資料顯示權限與會員可見欄位。</p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="primary-btn" id="saveSystemSettings">儲存設定</button>
+            <button class="ghost-btn" id="copyAdminLoginLink">複製管理端登入連結</button>
+            <button class="ghost-btn" id="lockAdminNow">鎖定管理端</button>
+          </div>
+        </div>
+
+        <div class="settings-summary-grid" id="settingsSummaryGrid"></div>
+
+        <div class="two-col settings-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Access Control</p>
+                <h3>管理端密碼與預設模式</h3>
+              </div>
+            </div>
+            <div class="helper-box warning-box">
+              這是 GitHub Pages / PWA 靜態版的「前端保護」，適合避免一般會員誤進管理端；若要真正防止外部取得資料，敏感資料仍建議不要放在公開檔案中，並搭配 Google Sheet 權限與不公開資料分層。
+            </div>
+            <div class="form-grid sync-form">
+              <div class="form-field">
+                <label for="settingDefaultMode">開啟系統時預設模式</label>
+                <select id="settingDefaultMode" class="form-control">
+                  <option value="member">會員端公開版</option>
+                  <option value="admin">管理端</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="settingRequireAdminLogin">是否啟用管理端密碼</label>
+                <select id="settingRequireAdminLogin" class="form-control">
+                  <option value="true">啟用，需要輸入密碼</option>
+                  <option value="false">停用，直接進入管理端</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="settingAdminPassword">管理端密碼</label>
+                <input id="settingAdminPassword" class="form-control" type="password" autocomplete="new-password" placeholder="預設：pig2025" />
+              </div>
+              <div class="form-field">
+                <label for="settingAdminToken">管理端 Admin Token</label>
+                <input id="settingAdminToken" class="form-control" placeholder="Google Sheet 上傳 / 管理端 URL 用" />
+              </div>
+              <div class="form-field full">
+                <label for="settingSyncUrl">Apps Script Web App URL</label>
+                <input id="settingSyncUrl" class="form-control" placeholder="https://script.google.com/macros/s/.../exec" value="https://script.google.com/macros/s/AKfycbzJwB9GqSf4TQNRHyX0RoFTD2QvQjJas_ZId7MiFmJ6wVvUAWZ7CEOdRlGx53KfojGd/exec" />
+              </div>
+              <div class="form-field full">
+                <label for="settingGitHubUrl">GitHub Pages 系統網址</label>
+                <input id="settingGitHubUrl" class="form-control" placeholder="例如：https://你的帳號.github.io/你的專案/" />
+                <small class="field-hint">填入 GitHub Pages 網址後，下方「常用公開與管理連結」會自動改用上線網址產生會員端首頁、會員端課表與管理端登入網址。</small>
+              </div>
+              <div class="form-field">
+                <label for="settingReadToken">會員端讀取 Token</label>
+                <input id="settingReadToken" class="form-control" placeholder="會員端讀取 / 回覆用" />
+              </div>
+              <div class="form-field">
+                <label for="settingSessionNote">目前管理端狀態</label>
+                <input id="settingSessionNote" class="form-control" readonly />
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Member Privacy</p>
+                <h3>會員端資料顯示權限</h3>
+              </div>
+            </div>
+            <p class="muted">控制一般會員打開公開版時，是否能看到會員名錄與個資欄位。建議電話、LINE、完整規模預設不要公開。</p>
+            <div class="setting-check-grid">
+              <label><input id="settingMemberAllowDirectory" type="checkbox" /> 會員端可查看會員名錄</label>
+              <label><input id="settingMemberShowFarmName" type="checkbox" /> 顯示豬場名稱</label>
+              <label><input id="settingMemberShowFarmType" type="checkbox" /> 顯示飼養型態</label>
+              <label><input id="settingMemberShowScale" type="checkbox" /> 顯示飼養規模</label>
+              <label><input id="settingMemberShowPhone" type="checkbox" /> 顯示電話</label>
+              <label><input id="settingMemberShowLine" type="checkbox" /> 顯示 LINE ID</label>
+              <label><input id="settingMemberShowSpecialty" type="checkbox" /> 顯示專長</label>
+              <label><input id="settingMemberShowBio" type="checkbox" /> 顯示會員簡介</label>
+            </div>
+            <div class="helper-box" id="memberPrivacyPreview">目前會員端資料顯示設定讀取中...</div>
+          </section>
+        </div>
+
+        <div class="two-col settings-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Public Links</p>
+                <h3>常用公開與管理連結</h3>
+              </div>
+            </div>
+            <div class="helper-box small-text" id="settingsLinkSourceNote">若已填 GitHub Pages 系統網址，以下連結會自動使用 GitHub 上線網址；尚未填寫時，會先用目前開啟的本機網址預覽。</div>
+            <div class="share-link-grid" id="settingsLinkGrid"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">System Note</p>
+                <h3>會員端首頁說明文字</h3>
+              </div>
+            </div>
+            <div class="form-field full">
+              <label for="settingPublicHomeNote">公開頁說明 / 注意事項</label>
+              <textarea id="settingPublicHomeNote" class="form-control" rows="5" placeholder="例如：課程時間若有異動，以 LINE 群組公告為準。"></textarea>
+            </div>
+            <div class="stack-actions">
+              <button class="ghost-btn" id="copySettingsSummary">複製設定摘要</button>
+              <button class="danger-btn" id="resetSystemSettings">恢復設定預設值</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view admin-only" id="view-data">
+        <div class="toolbar">
+          <div>
+            <p class="eyebrow">Data Center</p>
+            <h2>進階 JSON 資料管理</h2>
+          </div>
+        </div>
+        <div class="two-col">
+          <section class="panel">
+            <h3>資料備份</h3>
+            <p class="muted">目前資料會先存在瀏覽器 LocalStorage。Google Sheet 同步完成後，可再上傳雲端。</p>
+            <div class="stack-actions">
+              <button class="primary-btn" id="exportJson">匯出 JSON 備份</button>
+              <label class="file-btn">
+                匯入 JSON 備份
+                <input type="file" id="importJson" accept="application/json" />
+              </label>
+              <button class="danger-btn" id="resetData">重置為範例資料</button>
+            </div>
+          </section>
+          <section class="panel">
+            <h3>資料管理注意事項</h3>
+            <ul class="clean-list">
+              <li>正式上線前，請先在「備份還原」建立一份手動備份。</li>
+              <li>Google Sheet 同步完成後，建議固定以雲端資料作為主要資料來源。</li>
+              <li>一般會員只使用共用報名連結；幹部與會長才進入管理端編輯資料。</li>
+              <li>管理端密碼預設為 <strong>pig2025</strong>，可在「設定中心」修改。</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+
+  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="手機快速功能"></nav>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow" id="modalEyebrow">Form</p>
+          <h2 id="modalTitle">新增資料</h2>
+        </div>
+        <button class="icon-btn" id="closeModal" aria-label="關閉">×</button>
+      </div>
+      <form id="dynamicForm" class="form-grid"></form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script src="assets/app.v110.js"></script>
+</body>
+</html>

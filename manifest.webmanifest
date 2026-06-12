@@ -1,0 +1,41 @@
+{
+  "name": "山線養豬讀書會｜會員課程與主辦廠商管理系統",
+  "short_name": "山線讀書會",
+  "start_url": "./index.html?mode=member",
+  "display": "standalone",
+  "background_color": "#f8f1e8",
+  "theme_color": "#8b5a2b",
+  "description": "山線養豬讀書會課程、會員報名、餐廳地點、LINE 公告、幹部管理與 Google Sheet 同步系統。",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "scope": "./",
+  "orientation": "portrait",
+  "display_override": [
+    "standalone",
+    "browser"
+  ]
+}

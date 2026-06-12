@@ -1,0 +1,5412 @@
+:root {
+  --bg: #f8f1e8;
+  --paper: rgba(255,255,255,.88);
+  --paper-strong: #fffaf3;
+  --ink: #2b2118;
+  --muted: #746455;
+  --line: rgba(92, 62, 36, .16);
+  --brand: #8b5a2b;
+  --brand-2: #be7b3f;
+  --brand-3: #e8c594;
+  --green: #38794f;
+  --red: #b34538;
+  --blue: #375f86;
+  --shadow: 0 18px 60px rgba(67, 40, 18, .14);
+  --radius: 22px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(232,197,148,.62), transparent 38%),
+    radial-gradient(circle at 80% 10%, rgba(139,90,43,.15), transparent 34%),
+    linear-gradient(135deg, #fff9f0, var(--bg));
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 286px;
+  flex: 0 0 286px;
+  padding: 22px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(58,35,18,.95), rgba(108,67,32,.94));
+  color: #fff4df;
+  box-shadow: 12px 0 36px rgba(44,27,14,.18);
+  z-index: 10;
+}
+.brand-block { display: block; margin-bottom: 24px; }
+.brand-logo-image {
+  display: block;
+  width: calc(100% + 14px);
+  max-width: none;
+  height: auto;
+  margin-left: -6px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.14));
+}
+.brand-title { font-weight: 900; font-size: 18px; letter-spacing: .04em; }
+.brand-subtitle { font-size: 12px; color: rgba(255,244,223,.72); margin-top: 4px; }
+.nav-list { display: grid; gap: 10px; }
+.nav-item {
+  width: 100%; border: 1px solid rgba(255,255,255,.12); color: #fff7e8;
+  background: rgba(255,255,255,.08); border-radius: 16px; padding: 14px 16px;
+  text-align: left; font-weight: 800; transition: .18s ease;
+}
+.nav-item:hover, .nav-item.active { background: #fff4df; color: #4d2b13; transform: translateX(3px); }
+.sidebar-footer {
+  position: absolute; left: 22px; right: 22px; bottom: 22px;
+  padding: 16px; border-radius: 18px; background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.13); display: grid; gap: 4px; font-size: 13px;
+}
+.mini-label, .eyebrow { color: var(--brand-2); text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 900; margin: 0 0 5px; }
+.sidebar-footer .mini-label { color: #f3c986; }
+.main { flex: 1; padding: 24px; min-width: 0; }
+.hero {
+  min-height: 260px; border-radius: 34px; padding: 26px;
+  display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: stretch;
+  background:
+    linear-gradient(110deg, rgba(45,28,15,.88), rgba(100,59,28,.55), rgba(255,255,255,.72)),
+    radial-gradient(circle at 92% 30%, rgba(255,232,192,.95), rgba(255,232,192,0) 22%),
+    linear-gradient(135deg, #71451f, #f8e2bd);
+  color: white; box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.hero::after {
+  content: "🐖"; position: absolute; right: 34px; bottom: -26px; font-size: 150px; opacity: .16; filter: blur(.3px);
+}
+.hamburger { display: none; border: 0; background: rgba(255,255,255,.18); color: white; width: 44px; height: 44px; border-radius: 14px; font-size: 22px; }
+.hero h1 { font-size: clamp(28px, 4vw, 48px); margin: 6px 0 10px; line-height: 1.15; }
+.hero p { max-width: 720px; color: rgba(255,255,255,.84); margin: 0; line-height: 1.8; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.hero-card {
+  align-self: end; min-height: 180px; padding: 22px; border-radius: 26px;
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.28);
+  backdrop-filter: blur(12px); display: flex; flex-direction: column; justify-content: end; position: relative; z-index: 1;
+}
+.hero-icon { font-size: 54px; }
+.hero-card strong { font-size: 20px; margin-top: 10px; }
+.hero-card small { color: rgba(255,255,255,.78); margin-top: 8px; line-height: 1.5; }
+.view { display: none; animation: fadeIn .18s ease; }
+.view.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 16px; margin: 22px 0; }
+.kpi-card, .panel, .item-card {
+  border-radius: var(--radius); background: var(--paper); border: 1px solid rgba(255,255,255,.7);
+  box-shadow: var(--shadow); backdrop-filter: blur(10px);
+}
+.kpi-card { padding: 20px; position: relative; overflow: hidden; }
+.kpi-card::after { content: ""; position: absolute; right: -26px; top: -28px; width: 88px; height: 88px; border-radius: 999px; background: rgba(190,123,63,.16); }
+.kpi-card span { color: var(--muted); font-weight: 800; }
+.kpi-card strong { display: block; font-size: 34px; margin-top: 8px; }
+.two-col { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; margin: 18px 0; }
+.panel { padding: 22px; }
+.panel-head, .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+h2, h3 { margin: 0; }
+.toolbar { margin: 24px 0 18px; }
+.toolbar-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.primary-btn, .ghost-btn, .danger-btn, .file-btn, .mini-btn, .icon-btn {
+  border: 0; border-radius: 14px; padding: 11px 15px; font-weight: 900; transition: .16s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.primary-btn { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: white; box-shadow: 0 10px 24px rgba(139,90,43,.22); }
+.ghost-btn { background: rgba(255,255,255,.76); color: var(--brand); border: 1px solid var(--line); }
+.danger-btn { background: #fff1ef; color: var(--red); border: 1px solid rgba(179,69,56,.22); }
+.file-btn { background: #f2f7ff; color: var(--blue); border: 1px solid rgba(55,95,134,.22); cursor: pointer; }
+.file-btn input { display: none; }
+.primary-btn:hover, .ghost-btn:hover, .danger-btn:hover, .file-btn:hover, .mini-btn:hover { transform: translateY(-2px); filter: brightness(1.02); }
+.small { padding: 8px 12px; font-size: 13px; }
+.search-input, .select-input, .form-control {
+  border: 1px solid var(--line); background: rgba(255,255,255,.88); color: var(--ink);
+  border-radius: 14px; padding: 11px 13px; outline: none; min-height: 44px;
+}
+.search-input:focus, .select-input:focus, .form-control:focus { border-color: rgba(139,90,43,.5); box-shadow: 0 0 0 4px rgba(139,90,43,.08); }
+.card-grid { display: grid; gap: 16px; }
+.course-grid { grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+.member-grid { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+.location-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.item-card { padding: 18px; position: relative; overflow: hidden; }
+.item-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px; background: linear-gradient(90deg, var(--brand), var(--brand-3)); }
+.card-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.card-title { font-size: 20px; font-weight: 950; margin: 4px 0 8px; line-height: 1.35; }
+.card-meta { color: var(--muted); font-weight: 750; line-height: 1.7; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
+.badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 6px 10px; background: #fff4df; color: #734316; font-size: 12px; font-weight: 900; border: 1px solid rgba(139,90,43,.12); }
+.badge.green { background: #eef8f1; color: var(--green); }
+.badge.red { background: #fff1ef; color: var(--red); }
+.badge.blue { background: #f2f7ff; color: var(--blue); }
+.card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.mini-btn { background: rgba(255,255,255,.85); color: var(--brand); border: 1px solid var(--line); padding: 8px 10px; border-radius: 12px; font-size: 13px; }
+.icon-btn { width: 40px; height: 40px; padding: 0; background: rgba(255,255,255,.78); border: 1px solid var(--line); color: var(--ink); font-size: 24px; }
+.empty-box { padding: 22px; border: 1px dashed rgba(139,90,43,.28); border-radius: 18px; color: var(--muted); background: rgba(255,255,255,.45); }
+.notice-list { display: grid; gap: 10px; }
+.notice { padding: 14px; border-radius: 16px; background: rgba(255,244,223,.76); border: 1px solid rgba(139,90,43,.12); line-height: 1.65; }
+.timeline { display: grid; gap: 12px; }
+.timeline-item { display: grid; grid-template-columns: 110px 1fr auto; gap: 14px; align-items: center; padding: 14px; border-radius: 18px; background: rgba(255,255,255,.72); border: 1px solid var(--line); }
+.timeline-date { font-weight: 950; color: var(--brand); }
+.filter-pill { border-radius: 999px; background: #fff4df; padding: 8px 12px; font-weight: 900; color: var(--brand); }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; min-width: 760px; }
+.data-table th { text-align: left; color: var(--muted); padding: 0 12px; font-size: 13px; }
+.data-table td { padding: 14px 12px; background: rgba(255,255,255,.72); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.data-table td:first-child { border-left: 1px solid var(--line); border-radius: 14px 0 0 14px; }
+.data-table td:last-child { border-right: 1px solid var(--line); border-radius: 0 14px 14px 0; }
+.stack-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+.clean-list { line-height: 2; margin: 12px 0 0; padding-left: 20px; }
+.muted { color: var(--muted); line-height: 1.8; }
+.modal-backdrop[hidden] { display: none !important; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(43,33,24,.55); z-index: 50; display: grid; place-items: center; padding: 20px; }
+.modal { width: min(940px, 100%); max-height: min(88vh, 900px); overflow: auto; border-radius: 28px; background: #fffaf3; box-shadow: 0 28px 90px rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.6); }
+.modal-head { position: sticky; top: 0; z-index: 1; background: rgba(255,250,243,.95); backdrop-filter: blur(10px); display: flex; justify-content: space-between; gap: 15px; padding: 22px; border-bottom: 1px solid var(--line); }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 14px; padding: 22px; }
+.form-field { display: grid; gap: 7px; }
+.form-field.full { grid-column: 1 / -1; }
+.form-field label { color: var(--muted); font-weight: 900; font-size: 13px; }
+textarea.form-control { min-height: 110px; resize: vertical; }
+.form-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+.toast { position: fixed; right: 22px; bottom: 22px; background: #2f241b; color: white; padding: 13px 16px; border-radius: 14px; box-shadow: var(--shadow); opacity: 0; transform: translateY(10px); transition: .18s ease; z-index: 70; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+@media (max-width: 1080px) {
+  .sidebar { position: fixed; transform: translateX(-110%); transition: .2s ease; }
+  .sidebar.open { transform: translateX(0); }
+  .hamburger { display: inline-grid; place-items: center; }
+  .main { padding: 16px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-card { min-height: 150px; }
+}
+@media (max-width: 760px) {
+  .hero { padding: 18px; border-radius: 24px; }
+  .kpi-grid, .two-col { grid-template-columns: 1fr; }
+  .toolbar, .panel-head { align-items: flex-start; flex-direction: column; }
+  .toolbar-actions, .search-input, .select-input { width: 100%; }
+  .toolbar-actions > * { flex: 1 1 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+  .timeline-item { grid-template-columns: 1fr; }
+  .hero-actions button { width: 100%; }
+}
+
+/* PKG003: Google Sheet Sync + Admin/Member split */
+.mode-pill {
+  margin: -12px 0 18px;
+  border-radius: 999px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.16);
+  color: #ffe6b9;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-align: center;
+}
+body.member-mode .admin-only { display: none !important; }
+body.admin-mode .member-only { display: none !important; }
+.hidden { display: none !important; }
+.helper-box {
+  border-radius: 16px;
+  background: rgba(255,244,223,.82);
+  border: 1px solid rgba(139,90,43,.14);
+  padding: 14px 16px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+.reply-link-panel { display: grid; gap: 12px; }
+.reply-course-block {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,.64);
+}
+.reply-member-row {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(139,90,43,.16);
+}
+.reply-member-row:last-child { border-bottom: 0; }
+.copy-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  border-radius: 12px;
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.reply-panel .form-grid { margin-top: 14px; }
+.sync-status {
+  margin-top: 16px;
+  padding: 13px 14px;
+  border-radius: 15px;
+  border: 1px solid rgba(55,95,134,.18);
+  background: #f2f7ff;
+  color: var(--blue);
+  font-weight: 800;
+  line-height: 1.65;
+}
+.sync-status.ok { background: #eef8f1; color: var(--green); border-color: rgba(56,121,79,.18); }
+.sync-status.warn { background: #fff7e8; color: #8a5a12; border-color: rgba(190,130,35,.28); }
+.sync-status.err { background: #fff1ef; color: var(--red); border-color: rgba(179,69,56,.2); }
+.token-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: #f7efe5;
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 900;
+  border: 1px solid rgba(139,90,43,.12);
+}
+.mode-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 14px;
+  padding: 9px 12px;
+  color: var(--brand);
+  background: rgba(255,244,223,.78);
+  border: 1px solid rgba(139,90,43,.13);
+  font-weight: 900;
+}
+@media (max-width: 760px) {
+  .reply-member-row { grid-template-columns: 1fr; }
+  .copy-input { font-size: 11px; }
+}
+
+
+/* PKG005: Course attachment and post-course record center */
+.record-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.record-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 12px;
+}
+.record-stat {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.68);
+  padding: 14px;
+}
+.record-stat span {
+  display: block;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.record-stat strong {
+  display: block;
+  font-size: 24px;
+  color: var(--brand);
+  line-height: 1.25;
+}
+.record-card { min-height: 100%; }
+.record-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+.record-block {
+  border: 1px solid rgba(139,90,43,.12);
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255,250,243,.72);
+}
+.record-block strong {
+  display: block;
+  color: var(--brand);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.record-block p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.record-links {
+  margin: 12px 0;
+  border: 1px dashed rgba(139,90,43,.18);
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255,244,223,.46);
+}
+.record-links > strong {
+  color: var(--brand);
+  font-size: 13px;
+}
+.mini-btn.soft {
+  color: var(--muted);
+  background: rgba(255,255,255,.55);
+}
+@media (max-width: 760px) {
+  .record-grid, .record-summary { grid-template-columns: 1fr; }
+}
+
+/* PKG006: Fee settlement center */
+.table-sub {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.7;
+}
+.finance-modal-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 0;
+}
+.finance-modal-summary > div {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.68);
+  padding: 14px;
+}
+.finance-modal-summary span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.finance-modal-summary strong {
+  color: var(--brand);
+  font-size: 24px;
+}
+.payment-list {
+  display: grid;
+  gap: 10px;
+}
+.payment-row {
+  display: grid;
+  grid-template-columns: 1.1fr .55fr .55fr .65fr .9fr;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.66);
+  padding: 12px;
+}
+.payment-row strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.payment-row span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .payment-row { grid-template-columns: 1fr 1fr; }
+  .payment-row > div { grid-column: 1 / -1; }
+  .finance-modal-summary { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .payment-row { grid-template-columns: 1fr; }
+}
+.form-grid > .full { grid-column: 1 / -1; }
+
+/* PKG007: LINE notification text generator */
+.compact-form {
+  padding: 0;
+  margin-top: 14px;
+}
+.notify-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.notify-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgba(255,255,255,.68);
+  color: var(--muted);
+  font-weight: 900;
+  line-height: 1.4;
+}
+.notify-options input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand);
+}
+.notify-output-panel {
+  position: sticky;
+  top: 18px;
+  align-self: start;
+}
+.notify-output {
+  min-height: 520px;
+  line-height: 1.65;
+  font-family: "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+  background: rgba(255,255,255,.92);
+  white-space: pre-wrap;
+}
+.notify-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.notify-name-box {
+  grid-column: 1 / -1;
+  border: 1px dashed rgba(139,90,43,.2);
+  border-radius: 16px;
+  background: rgba(255,244,223,.52);
+  padding: 13px 14px;
+}
+.notify-name-box strong {
+  display: block;
+  color: var(--brand);
+  margin-bottom: 6px;
+}
+.notify-name-box p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 800;
+}
+@media (max-width: 1080px) {
+  .notify-output-panel { position: static; }
+}
+@media (max-width: 760px) {
+  .notify-options, .notify-summary { grid-template-columns: 1fr; }
+  .notify-output { min-height: 360px; }
+}
+
+
+/* PKG008: Knowledge base search center */
+.search-input.wide {
+  min-width: min(420px, 100%);
+}
+.knowledge-panel {
+  margin-bottom: 16px;
+}
+.knowledge-category-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+.knowledge-chip {
+  border: 1px solid rgba(139,90,43,.18);
+  background: rgba(255,255,255,.78);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(90,58,33,.06);
+}
+.knowledge-chip span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(139,90,43,.1);
+  color: var(--brand);
+}
+.knowledge-chip.active {
+  background: linear-gradient(135deg, rgba(139,90,43,.95), rgba(193,132,71,.9));
+  color: white;
+}
+.knowledge-chip.active span {
+  background: rgba(255,255,255,.22);
+  color: white;
+}
+.knowledge-results {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.knowledge-card {
+  border: 1px solid rgba(139,90,43,.14);
+  background: rgba(255,255,255,.82);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 16px 34px rgba(90,58,33,.09);
+}
+.knowledge-meta {
+  margin: 9px 0 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-weight: 800;
+}
+.knowledge-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 13px;
+}
+.knowledge-tags span {
+  border-radius: 999px;
+  background: rgba(255,244,223,.78);
+  color: var(--brand);
+  padding: 6px 10px;
+  font-size: .82rem;
+  font-weight: 900;
+}
+.knowledge-blocks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 12px 0 14px;
+}
+.knowledge-block {
+  border: 1px solid rgba(139,90,43,.12);
+  border-radius: 18px;
+  background: rgba(255,250,242,.78);
+  padding: 13px 14px;
+}
+.knowledge-block h3 {
+  margin: 0 0 8px;
+  color: var(--brand);
+  font-size: 1rem;
+}
+.knowledge-block p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.75;
+  font-weight: 760;
+}
+.knowledge-card mark {
+  background: rgba(255,213,128,.68);
+  color: inherit;
+  padding: 0 3px;
+  border-radius: 5px;
+}
+@media (max-width: 860px) {
+  .knowledge-blocks { grid-template-columns: 1fr; }
+  .search-input.wide { min-width: 0; }
+}
+
+
+/* PKG009: Annual report and effectiveness dashboard */
+.report-hero-panel {
+  overflow: hidden;
+}
+.report-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.report-kpi {
+  border: 1px solid rgba(139,90,43,.14);
+  background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(255,244,223,.76));
+  border-radius: 20px;
+  padding: 14px 15px;
+  box-shadow: 0 12px 24px rgba(90,58,33,.08);
+}
+.report-kpi span {
+  display: block;
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 900;
+  margin-bottom: 7px;
+}
+.report-kpi strong {
+  color: var(--brand-dark);
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+.report-layout {
+  align-items: start;
+}
+.report-bars {
+  display: grid;
+  gap: 12px;
+}
+.report-bar-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.2fr) 2fr 70px;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(139,90,43,.12);
+  background: rgba(255,255,255,.72);
+  border-radius: 16px;
+  padding: 11px 12px;
+}
+.report-bar-label strong {
+  display: block;
+  color: var(--text);
+  font-weight: 950;
+}
+.report-bar-label span {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+.report-bar-track {
+  height: 13px;
+  border-radius: 999px;
+  background: rgba(139,90,43,.1);
+  overflow: hidden;
+}
+.report-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(139,90,43,.95), rgba(226,161,83,.85));
+}
+.report-bar-value {
+  text-align: right;
+  color: var(--brand-dark);
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+@media (max-width: 980px) {
+  .report-kpis { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+  .report-bar-row { grid-template-columns: 1fr; }
+  .report-bar-value { text-align: left; }
+}
+@media (max-width: 640px) {
+  .report-kpis { grid-template-columns: 1fr; }
+}
+@media print {
+  body { background: white; }
+  .sidebar, .hero, .toolbar-actions, .hamburger, .toast, .modal-backdrop { display: none !important; }
+  .main { margin: 0 !important; padding: 0 !important; }
+  .view { display: none !important; }
+  #view-report { display: block !important; }
+  .panel, .item-card, .knowledge-card { box-shadow: none !important; break-inside: avoid; }
+  .toolbar { margin-bottom: 10px; }
+}
+
+/* PKG010: Officer assignment and pre-course checklist */
+.prep-hero-panel {
+  overflow: hidden;
+}
+.prep-course-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+.prep-course-card {
+  border: 1px solid rgba(139,90,43,.14);
+  background: rgba(255,255,255,.86);
+  border-radius: 26px;
+  padding: 18px;
+  box-shadow: 0 18px 38px rgba(90,58,33,.10);
+}
+.prep-progress {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(139,90,43,.10);
+  overflow: hidden;
+  margin: 14px 0 12px;
+}
+.prep-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(139,90,43,.95), rgba(226,161,83,.86));
+  transition: width .25s ease;
+}
+.prep-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 14px;
+}
+.prep-task-list {
+  display: grid;
+  gap: 11px;
+}
+.prep-task-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(139,90,43,.12);
+  background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,249,239,.78));
+  border-radius: 18px;
+  padding: 13px 14px;
+}
+.prep-task-row.overdue {
+  border-color: rgba(185,59,45,.28);
+  background: linear-gradient(135deg, rgba(255,250,250,.95), rgba(255,235,231,.76));
+}
+.prep-task-main strong {
+  display: block;
+  color: var(--brand-dark);
+  font-size: 1rem;
+  font-weight: 950;
+  margin-bottom: 5px;
+}
+.prep-task-main span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.55;
+  font-weight: 760;
+}
+.prep-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.prep-task-meta span {
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(139,90,43,.08);
+  color: var(--brand);
+  padding: 5px 9px;
+  font-size: .82rem;
+  font-weight: 900;
+}
+.prep-task-meta .danger-text {
+  background: rgba(185,59,45,.12);
+  color: #b93b2d;
+}
+.prep-task-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.compact-control {
+  min-width: 130px;
+  padding: 8px 10px;
+}
+.mini-btn.danger {
+  border-color: rgba(185,59,45,.25);
+  color: #b93b2d;
+}
+@media (max-width: 900px) {
+  .prep-task-row { grid-template-columns: 1fr; }
+  .prep-task-controls { justify-content: flex-start; }
+}
+@media print {
+  #view-prep { display: block !important; }
+}
+
+
+/* PKG011 group responsibility center */
+.group-card-list {
+  display: grid;
+  gap: 18px;
+}
+.group-card {
+  border: 1px solid rgba(139,90,43,.12);
+  border-radius: 24px;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,.94), rgba(255,248,236,.78));
+  box-shadow: var(--shadow-soft);
+}
+.group-hero-panel {
+  background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,246,230,.82));
+}
+.group-member-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+.group-member-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(139,90,43,.11);
+  border-radius: 18px;
+  padding: 12px 13px;
+  background: rgba(255,255,255,.82);
+}
+.group-member-row strong {
+  display: block;
+  color: var(--brand-dark);
+  font-weight: 950;
+  margin-bottom: 4px;
+}
+.group-member-row span {
+  color: var(--muted);
+  font-weight: 760;
+  line-height: 1.45;
+}
+.group-member-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+@media (max-width: 900px) {
+  .group-member-row { grid-template-columns: 1fr; }
+  .group-member-status { justify-content: flex-start; }
+}
+@media print {
+  #view-groups { display: block !important; }
+}
+
+/* PKG012 member import center */
+.import-hero-panel {
+  border: 1px solid rgba(139, 90, 43, 0.16);
+  background: linear-gradient(135deg, rgba(255, 248, 237, 0.96), rgba(238, 247, 240, 0.92));
+}
+.import-layout .panel {
+  min-height: 360px;
+}
+.csv-paste {
+  min-height: 190px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  line-height: 1.55;
+  white-space: pre;
+}
+.ghost-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 90, 43, 0.18);
+  background: rgba(255, 255, 255, 0.86);
+  color: #6b3f1e;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(76, 47, 19, 0.07);
+}
+.ghost-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(76, 47, 19, 0.10);
+}
+.mini-table-wrap {
+  max-height: 330px;
+  overflow: auto;
+}
+.compact-table th,
+.compact-table td {
+  padding: 10px 12px;
+  font-size: 0.88rem;
+}
+.small-text {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.status-badge.create {
+  color: #166534;
+  background: #dcfce7;
+}
+.status-badge.update {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+.status-badge.skip {
+  color: #92400e;
+  background: #fef3c7;
+}
+.status-badge.error {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+
+/* PKG013 course import center */
+.course-import-hero-panel {
+  background: linear-gradient(135deg, rgba(255, 248, 237, 0.98), rgba(235, 244, 255, 0.92));
+}
+#courseImportPreviewTable td:nth-child(4) {
+  min-width: 220px;
+}
+#courseImportPreviewTable td:nth-child(11) {
+  min-width: 220px;
+}
+
+/* PKG014 check-in and QR center */
+.checkin-hero-panel {
+  border: 1px solid rgba(139, 90, 43, 0.16);
+  background: linear-gradient(135deg, rgba(255, 248, 237, 0.98), rgba(239, 253, 244, 0.94));
+}
+.checkin-qr-layout {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+.qr-card {
+  border: 1px solid rgba(139, 90, 43, 0.14);
+  border-radius: 24px;
+  background: rgba(255,255,255,.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px;
+  box-shadow: 0 16px 34px rgba(76,47,19,.08);
+}
+.qr-card img {
+  width: 230px;
+  height: 230px;
+  border-radius: 18px;
+  background: #fff;
+  object-fit: contain;
+}
+.qr-card span {
+  font-weight: 900;
+  color: var(--brand-dark);
+}
+.checkin-public-card {
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: 24px;
+  background: rgba(255,255,255,.88);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.copy-url-box {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,248,237,.86);
+  border: 1px dashed rgba(139,90,43,.28);
+  color: #6b3f1e;
+  font-weight: 800;
+  word-break: break-all;
+  line-height: 1.5;
+}
+#checkinMemberTable td:first-child { min-width: 190px; }
+#checkinMemberTable td:nth-child(6) { min-width: 300px; }
+@media (max-width: 900px) {
+  .checkin-qr-layout { grid-template-columns: 1fr; }
+  .qr-card img { width: 200px; height: 200px; }
+}
+@media print {
+  #view-checkin { display: block !important; }
+}
+
+/* PKG015: course photo wall and media attachment center */
+.media-hero-panel {
+  border: 1px solid rgba(139, 90, 43, 0.16);
+  background: linear-gradient(135deg, rgba(255, 248, 237, 0.98), rgba(237, 247, 255, 0.94));
+}
+.media-form-grid {
+  grid-template-columns: repeat(3, minmax(170px, 1fr));
+}
+.media-course-groups {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+.media-course-panel {
+  overflow: hidden;
+}
+.media-chip-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.media-card {
+  border: 1px solid rgba(139,90,43,.13);
+  background: rgba(255,255,255,.9);
+  border-radius: 24px;
+  box-shadow: 0 14px 34px rgba(76,47,19,.07);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.media-preview {
+  min-height: 160px;
+  background: linear-gradient(135deg, rgba(255,244,223,.96), rgba(236,245,255,.96));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.media-preview img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+.media-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--brand);
+  min-height: 170px;
+  text-align: center;
+  padding: 18px;
+}
+.media-placeholder span {
+  font-size: 48px;
+}
+.media-placeholder strong {
+  font-size: 16px;
+}
+.media-card-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.media-card-title {
+  color: var(--brand-dark);
+  font-size: 17px;
+  line-height: 1.45;
+  font-weight: 950;
+}
+.media-card-body p {
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+.small-url {
+  font-size: 12px;
+  max-height: 70px;
+  overflow: auto;
+}
+.danger-mini {
+  color: var(--red) !important;
+  background: rgba(179,69,56,.08) !important;
+}
+@media (max-width: 760px) {
+  .media-form-grid { grid-template-columns: 1fr; }
+  .media-grid { grid-template-columns: 1fr; }
+  .media-chip-row { justify-content: flex-start; }
+}
+
+
+/* PKG016 feedback survey */
+.feedback-layout {
+  align-items: start;
+}
+.feedback-hero-panel {
+  background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,244,223,.94));
+}
+.feedback-form-panel .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.star-score {
+  color: #b8791f;
+  font-weight: 950;
+  white-space: nowrap;
+}
+.star-score b {
+  color: var(--brand-dark);
+  margin-left: 4px;
+}
+.feedback-insight {
+  display: grid;
+  gap: 14px;
+}
+.feedback-topic-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.checkbox-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  color: var(--brand-dark);
+}
+@media (max-width: 760px) {
+  .feedback-form-panel .form-grid { grid-template-columns: 1fr; }
+}
+
+
+/* PKG017 Topic Planning */
+.planning-hero-panel { border-color: rgba(139, 90, 43, .24); }
+.planning-two-col { align-items: start; }
+.planning-category-list, .planning-demand-list { display: grid; gap: 12px; }
+.planning-row, .planning-demand-item {
+  border: 1px solid rgba(139, 90, 43, .14);
+  background: rgba(255,255,255,.78);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 26px rgba(82, 52, 28, .06);
+}
+.planning-row.has-gap { border-color: rgba(194, 65, 12, .22); background: rgba(255, 247, 237, .82); }
+.planning-row.is-ok { border-color: rgba(22, 101, 52, .18); background: rgba(240, 253, 244, .72); }
+.planning-row-main, .planning-demand-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.progress-track { height: 9px; background: rgba(139, 90, 43, .12); border-radius: 999px; overflow: hidden; margin: 10px 0 8px; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #8b5a2b, #d49a5b); border-radius: 999px; }
+.small-note { color: #7c6045; font-size: 12px; line-height: 1.55; }
+.planning-suggestion-card .card-title { line-height: 1.35; }
+.planning-month-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.planning-month-card { border: 1px solid rgba(139, 90, 43, .16); border-radius: 16px; padding: 12px; background: #fffaf4; display: grid; gap: 4px; min-height: 86px; }
+.planning-month-card.empty { background: rgba(255,255,255,.55); color: #9a8067; }
+.planning-month-card span { font-weight: 800; color: #8b5a2b; }
+.planning-month-card small { line-height: 1.4; }
+@media (max-width: 900px) { .planning-month-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .planning-month-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .planning-row-main, .planning-demand-item { flex-direction: column; } }
+
+
+/* PKG018 speaker / consultant invite center */
+.speaker-hero-panel .record-summary,
+#speakerSummary.record-summary {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.speaker-two-col {
+  align-items: start;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+}
+.speaker-grid,
+.invite-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.speaker-card .record-sections,
+.invite-card .record-sections {
+  margin-top: 12px;
+}
+.invite-form-panel {
+  position: sticky;
+  top: 14px;
+}
+@media (max-width: 960px) {
+  .speaker-two-col { grid-template-columns: 1fr; }
+  .invite-form-panel { position: static; }
+}
+
+
+/* PKG019 announcement center */
+.announcement-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.announcement-card { border-left: 5px solid rgba(139, 90, 43, .35); }
+.announcement-card.pinned-announcement { box-shadow: 0 18px 40px rgba(139, 90, 43, .16); border-left-color: rgba(139, 90, 43, .85); }
+.announcement-line-text { line-height: 1.75; white-space: normal; }
+.announcement-hero-panel .record-summary { margin-top: 12px; }
+
+
+/* PKG020 Dashboard + mobile operation optimization */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.nav-list {
+  overflow-y: auto;
+  padding-right: 4px;
+  padding-bottom: 14px;
+  scrollbar-width: thin;
+}
+.nav-list::-webkit-scrollbar { width: 7px; }
+.nav-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 999px; }
+.nav-section-title {
+  margin: 12px 2px 2px;
+  padding: 8px 10px 4px;
+  color: rgba(255,230,185,.78);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.nav-item {
+  display: grid;
+  gap: 3px;
+  min-height: 54px;
+  align-content: center;
+}
+.nav-item span { display: block; font-weight: 950; }
+.nav-item small {
+  display: block;
+  color: rgba(255,244,223,.66);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+.nav-item:hover small,
+.nav-item.active small { color: rgba(77,43,19,.68); }
+.sidebar-footer {
+  position: static;
+  margin-top: 14px;
+  flex: 0 0 auto;
+}
+.dashboard-workbench { margin: 18px 0; }
+.dashboard-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+.dashboard-quick-card,
+.dashboard-alert-card {
+  border: 1px solid rgba(139,90,43,.14);
+  border-radius: 20px;
+  background: rgba(255,255,255,.82);
+  box-shadow: 0 14px 34px rgba(76,47,19,.07);
+  text-align: left;
+  padding: 16px;
+  color: var(--ink);
+  transition: .16s ease;
+}
+.dashboard-quick-card:hover,
+.dashboard-alert-card:hover { transform: translateY(-2px); filter: brightness(1.01); }
+.dashboard-quick-card .quick-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: #fff4df;
+  color: var(--brand);
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.dashboard-quick-card strong,
+.dashboard-alert-card strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.dashboard-quick-card small,
+.dashboard-alert-card small {
+  display: block;
+  line-height: 1.6;
+  color: var(--muted);
+  font-weight: 750;
+}
+.dashboard-alert-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.dashboard-alert-card span {
+  display: block;
+  color: var(--muted);
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.dashboard-alert-card.ok { border-color: rgba(56,121,79,.18); background: rgba(240,253,244,.76); }
+.dashboard-alert-card.warn { border-color: rgba(190,123,63,.26); background: rgba(255,247,237,.82); }
+.dashboard-alert-card.danger { border-color: rgba(179,69,56,.23); background: rgba(255,241,239,.82); }
+.mobile-bottom-nav { display: none; }
+@media (max-width: 1080px) {
+  .sidebar { height: 100dvh; max-width: min(86vw, 340px); }
+  .nav-item { min-height: 58px; }
+}
+@media (max-width: 900px) {
+  .dashboard-alert-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  body { padding-bottom: 76px; }
+  .hero { min-height: auto; }
+  .hero h1 { font-size: 26px; }
+  .hero p { line-height: 1.65; }
+  .hero-card { display: none; }
+  .dashboard-quick-grid { grid-template-columns: 1fr 1fr; }
+  .dashboard-quick-card { padding: 13px; border-radius: 18px; }
+  .dashboard-quick-card .quick-icon { width: 36px; height: 36px; font-size: 20px; margin-bottom: 8px; }
+  .dashboard-quick-card strong { font-size: 15px; }
+  .dashboard-quick-card small { font-size: 12px; line-height: 1.45; }
+  .dashboard-alert-grid { grid-template-columns: 1fr; }
+  .mobile-bottom-nav {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 45;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    padding: 8px;
+    border-radius: 22px;
+    background: rgba(47, 31, 18, .92);
+    box-shadow: 0 18px 50px rgba(34, 20, 9, .28);
+    backdrop-filter: blur(16px);
+  }
+  .mobile-bottom-nav .nav-item {
+    min-height: 44px;
+    padding: 8px 4px;
+    border-radius: 15px;
+    text-align: center;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.1);
+    color: #fff4df;
+    font-size: 12px;
+    display: grid;
+    place-items: center;
+  }
+  .mobile-bottom-nav .nav-item small { display: none; }
+  .mobile-bottom-nav .nav-item:hover,
+  .mobile-bottom-nav .nav-item.active {
+    transform: none;
+    color: #4d2b13;
+    background: #fff4df;
+  }
+  .toast { bottom: 92px; left: 16px; right: 16px; text-align: center; }
+}
+@media (max-width: 460px) {
+  .dashboard-quick-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .mobile-bottom-nav { display: none !important; }
+}
+
+
+/* PKG021: Member public simplified mode + share links */
+body.member-mode .nav-item[data-view="knowledge"],
+body.member-mode .nav-item[data-view="records"],
+body.member-mode .nav-item[data-view="feedback"],
+body.member-mode .nav-item[data-view="report"],
+body.member-mode .nav-item[data-view="members"],
+body.member-mode .nav-item[data-view="attendance"],
+body.member-mode .nav-item[data-view="finance"],
+body.member-mode .nav-section-title:nth-of-type(2) {
+  display: none !important;
+}
+body.member-mode .hero-actions .admin-only,
+body.member-mode .dashboard-alert-card[data-view-jump="finance"],
+body.member-mode .dashboard-alert-card[data-view-jump="records"] {
+  display: none !important;
+}
+body.member-mode .mode-pill {
+  background: rgba(255,244,223,.18);
+  color: #fff4df;
+  border-color: rgba(255,244,223,.3);
+}
+.share-link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.share-link-card {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,.74);
+  box-shadow: 0 12px 30px rgba(86, 54, 25, .08);
+  display: grid;
+  gap: 10px;
+}
+.share-link-card strong { color: var(--ink); }
+.share-url {
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(139,90,43,.08);
+  border: 1px dashed rgba(139,90,43,.22);
+  border-radius: 14px;
+  padding: 10px;
+  word-break: break-all;
+  line-height: 1.5;
+}
+.member-public-note {
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: rgba(240, 253, 244, .72);
+  border: 1px solid rgba(56, 121, 79, .18);
+  color: #315f40;
+  line-height: 1.7;
+}
+.member-course-actions .mini-btn { min-width: 92px; }
+@media (max-width: 760px) {
+  .share-link-grid { grid-template-columns: 1fr; }
+}
+
+
+/* PKG022：LINE 群組公告版型強化 + 單場課程分享卡 */
+.share-card-layout { align-items: start; }
+.share-card-options { margin-top: 14px; }
+.share-card-preview-panel { position: sticky; top: 16px; }
+.course-share-card-preview {
+  border-radius: 28px;
+  padding: 22px;
+  margin-bottom: 14px;
+  color: #3b2717;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(251, 191, 36, .26), transparent 30%),
+    linear-gradient(135deg, rgba(255, 248, 231, .96), rgba(255, 255, 255, .88));
+  border: 1px solid rgba(139,90,43,.22);
+  box-shadow: 0 18px 46px rgba(86,54,25,.14);
+  display: grid;
+  gap: 13px;
+}
+.share-card-topline {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(139,90,43,.12);
+  color: #704214;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.course-share-card-preview h3 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.18;
+}
+.share-card-meta,
+.share-card-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+.share-card-meta span,
+.share-card-location {
+  border-radius: 16px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.68);
+  border: 1px solid rgba(139,90,43,.13);
+  font-size: 13px;
+  font-weight: 700;
+}
+.course-share-card-preview p {
+  margin: 0;
+  line-height: 1.8;
+  color: #5c4634;
+}
+.share-card-stat-row span {
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(139,90,43,.12);
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+.share-card-stat-row strong { font-size: 22px; color: #8b5a2b; }
+.share-card-stat-row small { color: var(--muted); font-weight: 700; }
+.share-card-footer {
+  border-top: 1px dashed rgba(139,90,43,.24);
+  padding-top: 12px;
+  color: #704214;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+.share-card-output { min-height: 260px; }
+@media (max-width: 980px) {
+  .share-card-preview-panel { position: static; }
+}
+
+/* PKG023 backup restore center */
+.backup-table { min-width: 920px; }
+.compact-actions { gap: 6px; margin-top: 0; }
+.compact-actions .mini-btn { padding: 7px 9px; font-size: 12px; }
+.danger-mini { color: var(--red) !important; border-color: rgba(176, 72, 54, .28) !important; background: #fff1ef !important; }
+.backup-table td { vertical-align: top; }
+
+
+/* PKG024: Settings center + permission classes */
+.settings-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.settings-grid .helper-box.warning-box {
+  border-color: rgba(190, 117, 22, .28);
+  background: rgba(255, 246, 224, .78);
+}
+.setting-check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.setting-check-grid label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255,255,255,.72);
+  color: var(--text);
+  font-size: .94rem;
+}
+.setting-check-grid input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brown);
+}
+body.member-mode.allow-member-directory .nav-item[data-view="members"] {
+  display: flex !important;
+}
+body.member-mode.allow-member-directory #view-members:not(.active) {
+  display: none !important;
+}
+body.member-mode.hide-member-directory #view-members {
+  display: none !important;
+}
+
+
+/* PKG026：既有介面與操作順暢度優化，不新增新模組 */
+button, .primary-btn, .ghost-btn, .danger-btn, .file-btn, .mini-btn, .icon-btn, .nav-item {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+.primary-btn:focus-visible,
+.ghost-btn:focus-visible,
+.danger-btn:focus-visible,
+.file-btn:focus-visible,
+.mini-btn:focus-visible,
+.icon-btn:focus-visible,
+.nav-item:focus-visible,
+.search-input:focus-visible,
+.select-input:focus-visible,
+.form-control:focus-visible {
+  outline: 3px solid rgba(190, 123, 63, .34);
+  outline-offset: 2px;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar .brand-block { flex: 0 0 auto; margin-bottom: 16px; }
+.sidebar .brand-logo-image { transform-origin: left center; width: calc(100% + 14px); max-width: none; }
+.sidebar .mode-pill { flex: 0 0 auto; margin: 0 0 12px; }
+.sidebar .nav-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  padding-bottom: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,244,223,.45) transparent;
+}
+.sidebar .nav-list::-webkit-scrollbar { width: 8px; }
+.sidebar .nav-list::-webkit-scrollbar-thumb { background: rgba(255,244,223,.32); border-radius: 999px; }
+.sidebar-footer {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  flex: 0 0 auto;
+  margin-top: 14px;
+}
+.nav-item {
+  min-height: 56px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+}
+.nav-item small {
+  display: block;
+  line-height: 1.35;
+  opacity: .76;
+  font-weight: 650;
+}
+.nav-item.active { box-shadow: inset 4px 0 0 rgba(190,123,63,.85), 0 8px 20px rgba(0,0,0,.08); }
+.nav-section-title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 4px 7px;
+  background: linear-gradient(180deg, rgba(70,43,22,.98), rgba(70,43,22,.86));
+  backdrop-filter: blur(8px);
+}
+.main:focus { outline: none; }
+.view.active { content-visibility: auto; contain-intrinsic-size: 1000px; }
+.kpi-card, .panel, .item-card, .share-link-card, .course-share-card-preview {
+  contain: content;
+}
+.toolbar,
+.panel-head {
+  flex-wrap: wrap;
+}
+.toolbar-actions .primary-btn,
+.toolbar-actions .ghost-btn,
+.toolbar-actions .danger-btn,
+.toolbar-actions .file-btn,
+.stack-actions .primary-btn,
+.stack-actions .ghost-btn,
+.stack-actions .danger-btn,
+.stack-actions .file-btn,
+.card-actions .mini-btn {
+  min-height: 42px;
+}
+.card-actions .mini-btn { flex: 0 1 auto; }
+.table-wrap {
+  border-radius: 18px;
+  background: rgba(255,255,255,.38);
+  border: 1px solid rgba(139,90,43,.08);
+  padding: 2px;
+  scrollbar-width: thin;
+}
+.table-wrap::before {
+  content: "表格可左右滑動";
+  display: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 10px 0;
+}
+.data-table td { vertical-align: top; }
+.modal-backdrop { overscroll-behavior: contain; }
+.modal {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.modal-head {
+  box-shadow: 0 8px 22px rgba(86,54,25,.08);
+}
+.modal .form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 12px 0 4px;
+  background: linear-gradient(180deg, rgba(255,250,243,0), rgba(255,250,243,.98) 28%);
+}
+.search-input,
+.select-input,
+.form-control {
+  transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.primary-btn, .ghost-btn, .danger-btn, .file-btn, .mini-btn, .icon-btn, .nav-item {
+  will-change: transform;
+}
+.empty-box { line-height: 1.8; }
+@media (max-width: 1080px) {
+  .sidebar {
+    max-width: min(86vw, 330px);
+  }
+  body.sidebar-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    background: rgba(43,33,24,.38);
+    backdrop-filter: blur(2px);
+  }
+  .nav-section-title { top: 0; }
+}
+@media (max-width: 760px) {
+  html { scroll-padding-bottom: 92px; }
+  .main { padding-bottom: calc(94px + env(safe-area-inset-bottom)); }
+  .hero { min-height: auto; }
+  .hero-card { display: none; }
+  .hero-actions { gap: 8px; }
+  .hero-actions .ghost-btn,
+  .hero-actions .primary-btn { min-height: 44px; }
+  .kpi-card { padding: 16px; }
+  .kpi-card strong { font-size: 28px; }
+  .panel { padding: 16px; }
+  .item-card { padding: 16px; }
+  .card-top { display: grid; gap: 8px; }
+  .card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-actions .mini-btn { width: 100%; }
+  .table-wrap::before { display: block; }
+  .data-table { min-width: 720px; }
+  .modal-backdrop { padding: 10px; align-items: end; }
+  .modal { width: 100%; max-height: 92vh; border-radius: 24px 24px 0 0; }
+  .modal-head { padding: 16px; }
+  .form-grid { padding: 16px; gap: 12px; }
+  .form-actions { justify-content: stretch; }
+  .form-actions .primary-btn,
+  .form-actions .ghost-btn,
+  .form-actions .danger-btn { flex: 1 1 0; }
+  .mobile-bottom-nav { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+}
+@media (max-width: 460px) {
+  .card-actions { grid-template-columns: 1fr; }
+  .toolbar-actions > *,
+  .stack-actions > * { width: 100%; }
+  .primary-btn, .ghost-btn, .danger-btn, .file-btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+
+/* PKG027：現有介面二次優化｜按鈕狀態、路由一致、表格閱讀與操作穩定 */
+button[disabled],
+.primary-btn[disabled],
+.ghost-btn[disabled],
+.danger-btn[disabled],
+.file-btn[disabled],
+.mini-btn[disabled],
+.icon-btn[disabled],
+.is-busy {
+  opacity: .62;
+  cursor: progress !important;
+  transform: none !important;
+  filter: grayscale(.08);
+}
+.ghost-btn.is-active-mode {
+  background: #fff4df;
+  color: #4d2b13;
+  border-color: rgba(190,123,63,.42);
+  box-shadow: inset 0 0 0 2px rgba(190,123,63,.16);
+}
+.toolbar-actions {
+  align-items: center;
+}
+.toolbar-actions .search-input,
+.toolbar-actions .search-input.wide {
+  flex: 1 1 260px;
+  min-width: min(100%, 240px);
+}
+.toolbar-actions .select-input {
+  flex: 0 1 190px;
+}
+.panel-head .filter-pill,
+.toolbar .filter-pill {
+  white-space: nowrap;
+}
+.table-wrap {
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(255,250,243,.96);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.data-table tbody tr:hover td {
+  background: rgba(255,244,223,.92);
+}
+.nav-item span,
+.dashboard-quick-card strong,
+.dashboard-alert-card span {
+  overflow-wrap: anywhere;
+}
+.dashboard-quick-card,
+.dashboard-alert-card,
+.share-link-card,
+.item-card {
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+}
+.dashboard-quick-card:hover,
+.dashboard-alert-card:hover,
+.share-link-card:hover,
+.item-card:hover {
+  border-color: rgba(190,123,63,.28);
+}
+.form-field label {
+  line-height: 1.35;
+}
+.form-control::placeholder,
+.search-input::placeholder {
+  color: rgba(116,100,85,.72);
+}
+.toast.show {
+  box-shadow: 0 18px 42px rgba(43,33,24,.22);
+}
+@media (max-width: 760px) {
+  .toolbar-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .toolbar-actions .search-input,
+  .toolbar-actions .search-input.wide,
+  .toolbar-actions .select-input,
+  .toolbar-actions button,
+  .toolbar-actions a {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  .panel-head .filter-pill,
+  .toolbar .filter-pill {
+    white-space: normal;
+  }
+  .data-table th {
+    top: 0;
+  }
+  .nav-item {
+    min-height: 52px;
+  }
+  .nav-item small {
+    font-size: 11.5px;
+  }
+}
+
+/* PKG028：會員端上課時段與參加人數登記優化 */
+.member-signup-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, .75fr);
+  gap: 18px;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+.member-signup-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-content: start;
+}
+.member-signup-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.signup-summary-card {
+  border: 1px solid rgba(30, 64, 175, .18);
+  border-radius: 20px;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(239, 246, 255, .95), rgba(255, 255, 255, .92));
+  box-shadow: 0 12px 28px rgba(15, 23, 42, .08);
+}
+.signup-summary-card span,
+.signup-summary-card small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.signup-summary-card strong {
+  display: block;
+  font-size: clamp(32px, 8vw, 54px);
+  line-height: 1.05;
+  margin: 8px 0;
+  color: var(--primary-dark);
+}
+.public-signup-admin-box {
+  border: 1px solid rgba(15, 23, 42, .08);
+  background: rgba(255, 255, 255, .7);
+  border-radius: 18px;
+  padding: 14px;
+  width: 100%;
+}
+.compact-head {
+  margin-bottom: 10px;
+}
+.compact-table th,
+.compact-table td {
+  padding: 9px 10px;
+}
+.form-actions.full {
+  grid-column: 1 / -1;
+}
+@media (max-width: 760px) {
+  .member-signup-layout,
+  .member-signup-form {
+    grid-template-columns: 1fr;
+  }
+  .member-signup-side {
+    order: -1;
+  }
+}
+
+
+/* PKG029：會員端報名流程、防呆與人數統計收斂優化 */
+.attendance-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.attendance-kpi {
+  border: 1px solid rgba(139, 90, 43, .14);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: rgba(255, 252, 246, .86);
+  box-shadow: 0 10px 24px rgba(68, 48, 30, .06);
+}
+.attendance-kpi span,
+.attendance-kpi small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.attendance-kpi strong {
+  display: block;
+  font-size: 24px;
+  margin: 5px 0;
+  color: var(--primary-dark);
+}
+.simplified-signup .signup-confirmation {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(56, 121, 79, .22);
+  background: #eef8f1;
+  color: #28643c;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 4px;
+}
+.simplified-signup .signup-confirmation.warn {
+  border-color: rgba(179,69,56,.22);
+  background: #fff1ef;
+  color: var(--red);
+}
+.signup-confirmation span,
+.signup-confirmation small { line-height: 1.5; }
+.signup-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 2px;
+  color: var(--primary-dark);
+  font-weight: 800;
+}
+.signup-step b {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(139, 90, 43, .12);
+  color: var(--primary-dark);
+}
+.required-star { color: var(--red); }
+.field-help {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.attendance-breakdown-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+.attendance-breakdown-row span {
+  border: 1px solid rgba(15,23,42,.08);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,.72);
+  color: var(--muted);
+  font-size: 12px;
+}
+.map-large {
+  justify-content: center;
+  min-height: 42px;
+}
+.sticky-signup-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 4;
+  padding: 10px;
+  border: 1px solid rgba(139, 90, 43, .12);
+  border-radius: 18px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(10px);
+}
+@media (max-width: 980px) {
+  .attendance-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .attendance-summary-grid { grid-template-columns: 1fr; }
+  .sticky-signup-actions { position: static; }
+}
+
+/* PKG032: 年度課程表卡片精簡化 */
+.course-grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+.course-card-compact {
+  padding: 13px 14px 12px;
+  border-radius: 18px;
+  min-height: 0;
+}
+.course-card-compact::before { height: 4px; }
+.course-card-compact .card-top { gap: 8px; align-items: flex-start; }
+.course-card-compact .eyebrow {
+  font-size: 10px;
+  letter-spacing: .08em;
+  margin-bottom: 3px;
+}
+.course-card-compact .card-title {
+  font-size: 16px;
+  line-height: 1.32;
+  margin: 2px 0 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.course-card-compact .card-meta {
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+.course-card-compact .badge-row {
+  gap: 5px;
+  margin: 8px 0 0;
+}
+.course-card-compact .badge {
+  font-size: 11px;
+  padding: 4px 7px;
+  gap: 4px;
+}
+.course-card-compact .card-actions {
+  gap: 5px;
+  margin-top: 10px;
+}
+.course-card-compact .mini-btn {
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  min-height: 31px;
+}
+.course-card-compact .card-top > .badge {
+  flex: 0 0 auto;
+  max-width: 82px;
+  justify-content: center;
+}
+@media (max-width: 760px) {
+  .course-grid { grid-template-columns: 1fr; gap: 10px; }
+  .course-card-compact { padding: 12px; border-radius: 16px; }
+  .course-card-compact .card-title { font-size: 15px; }
+  .course-card-compact .card-meta { font-size: 12.5px; }
+}
+
+/* PKG033: 全頁面卡片尺寸一致精簡優化
+   目標：所有管理端/會員端卡片採適中尺寸，減少過大的留白、圓角、陰影與行高。
+   不新增功能，只調整現有卡片、面板、統計框、表格列與手機版顯示密度。 */
+:root {
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(67, 40, 18, .10);
+}
+.main { padding: 18px; }
+.hero {
+  min-height: 205px;
+  border-radius: 26px;
+  padding: 20px;
+  grid-template-columns: 1fr 230px;
+  gap: 16px;
+}
+.hero::after { font-size: 112px; right: 22px; bottom: -20px; }
+.hero h1 { font-size: clamp(24px, 3.1vw, 38px); margin: 4px 0 8px; }
+.hero p { line-height: 1.62; font-size: 14px; max-width: 760px; }
+.hero-actions { gap: 8px; margin-top: 16px; }
+.hero-card { min-height: 132px; padding: 16px; border-radius: 20px; }
+.hero-icon { font-size: 38px; }
+.hero-card strong { font-size: 16px; margin-top: 6px; }
+.hero-card small { margin-top: 5px; line-height: 1.38; }
+
+.kpi-grid { gap: 12px; margin: 16px 0; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.kpi-card { padding: 14px 15px; min-height: 94px; }
+.kpi-card::after { width: 64px; height: 64px; right: -20px; top: -20px; }
+.kpi-card span { font-size: 12px; }
+.kpi-card strong { font-size: 27px; margin-top: 5px; line-height: 1.05; }
+
+.panel { padding: 16px; border-radius: 18px; }
+.panel-head, .toolbar { gap: 11px; margin-bottom: 12px; }
+.toolbar { margin: 18px 0 12px; }
+.toolbar-actions { gap: 8px; }
+.two-col { gap: 14px; margin: 14px 0; }
+
+.primary-btn, .ghost-btn, .danger-btn, .file-btn, .mini-btn, .icon-btn {
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: 13px;
+  min-height: 38px;
+}
+.small { padding: 7px 10px; font-size: 12px; min-height: 34px; }
+.search-input, .select-input, .form-control { border-radius: 12px; padding: 9px 11px; min-height: 39px; font-size: 14px; }
+
+.card-grid { gap: 12px; }
+.course-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.member-grid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.location-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.speaker-grid, .invite-grid, .sponsor-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.announcement-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.record-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.item-card, .knowledge-card, .prep-course-card, .group-card, .dashboard-quick-card, .dashboard-alert-card,
+.planning-row, .planning-demand-item, .planning-suggestion-card, .qr-card, .checkin-public-card,
+.media-card, .announcement-card {
+  padding: 13px 14px;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(76,47,19,.075);
+}
+.item-card::before { height: 4px; }
+.card-top { gap: 8px; }
+.card-title { font-size: 17px; margin: 2px 0 6px; line-height: 1.28; }
+.card-meta { line-height: 1.52; font-size: 13px; }
+.badge-row { gap: 5px; margin: 8px 0; }
+.badge, .filter-pill { padding: 5px 8px; font-size: 11px; }
+.card-actions { gap: 6px; margin-top: 9px; }
+.mini-btn { padding: 6px 8px; border-radius: 10px; font-size: 12px; min-height: 31px; }
+.icon-btn { width: 36px; height: 36px; font-size: 20px; }
+.empty-box { padding: 15px; border-radius: 14px; }
+.notice { padding: 11px 12px; border-radius: 14px; line-height: 1.52; }
+.timeline { gap: 9px; }
+.timeline-item { padding: 11px 12px; border-radius: 14px; grid-template-columns: 92px 1fr auto; gap: 10px; }
+
+.data-table { border-spacing: 0 7px; }
+.data-table th { padding: 0 10px; font-size: 12px; }
+.data-table td { padding: 10px 10px; font-size: 13px; }
+.data-table td:first-child { border-radius: 11px 0 0 11px; }
+.data-table td:last-child { border-radius: 0 11px 11px 0; }
+.stack-actions { gap: 8px; margin-top: 10px; }
+.clean-list, .muted { line-height: 1.6; }
+
+/* 首頁工作台與警示卡 */
+.dashboard-workbench { margin: 14px 0; }
+.dashboard-quick-grid { grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; }
+.dashboard-quick-card .quick-icon { width: 34px; height: 34px; border-radius: 12px; font-size: 18px; margin-bottom: 7px; }
+.dashboard-quick-card strong, .dashboard-alert-card strong { font-size: 15px; margin-bottom: 3px; }
+.dashboard-quick-card small, .dashboard-alert-card small { line-height: 1.45; font-size: 12px; }
+.dashboard-alert-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 14px 0; }
+.dashboard-alert-card span { margin-bottom: 2px; font-size: 12px; }
+
+/* 課程、紀錄、知識庫 */
+.compact-course-card.item-card { padding: 11px 12px; border-radius: 15px; }
+.compact-course-card .card-title { font-size: 16px; line-height: 1.24; margin-bottom: 5px; }
+.compact-course-card .card-meta { line-height: 1.42; }
+.compact-course-card .badge-row { margin: 7px 0; }
+.compact-course-card .card-actions { margin-top: 7px; }
+.record-card .record-sections, .knowledge-blocks, .media-course-groups { gap: 9px; }
+.record-section, .knowledge-block, .media-course-group { padding: 10px 11px; border-radius: 13px; }
+.knowledge-card { gap: 9px; }
+.knowledge-card h3, .record-card h3, .announcement-card h3 { font-size: 16px; line-height: 1.32; }
+.knowledge-blocks { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+/* 課前分工、組別責任區、主題規劃 */
+.prep-course-list, .group-card-list, .planning-category-list, .planning-demand-list { gap: 11px; }
+.prep-task-row, .group-member-row, .payment-row, .reply-member-row { padding: 10px 11px; border-radius: 13px; gap: 9px; }
+.group-card-header, .prep-course-head, .planning-row-main, .planning-demand-item { gap: 9px; }
+.planning-month-grid { gap: 8px; }
+.planning-month-card { min-height: 68px; padding: 9px 10px; border-radius: 13px; }
+.progress-track { height: 7px; margin: 7px 0 5px; }
+.small-note { font-size: 11px; }
+
+/* 匯入、同步、備份、設定與表單卡片 */
+.import-hero-panel, .course-import-hero-panel, .sync-hero-panel, .backup-hero-panel, .settings-hero-panel,
+.report-hero-panel, .speaker-hero-panel, .media-hero-panel, .feedback-hero-panel, .checkin-hero-panel, .group-hero-panel,
+.prep-hero-panel, .planning-hero-panel {
+  padding: 16px;
+}
+.report-kpis, .record-summary, .attendance-summary-grid, .finance-modal-summary { gap: 9px; }
+.report-kpi, .record-summary-card, .attendance-summary-card, .finance-summary-card, .import-kpi, .sync-status-card,
+.backup-card, .setting-card {
+  padding: 11px 12px;
+  border-radius: 14px;
+}
+.report-kpi strong, .record-summary-card strong, .attendance-summary-card strong, .finance-summary-card strong,
+.import-kpi strong, .sync-status-card strong { font-size: 22px; line-height: 1.1; }
+
+.form-grid { gap: 10px; padding: 16px; }
+.compact-form { gap: 9px; }
+.form-field { gap: 5px; }
+.form-actions { gap: 8px; margin-top: 4px; }
+.modal { border-radius: 20px; }
+.modal-head { padding: 16px; }
+.modal-body { padding: 0; }
+
+/* 照片、附件、QR 與 LINE 分享卡 */
+.media-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.media-placeholder { min-height: 112px; padding: 12px; border-radius: 14px; }
+.media-placeholder span { font-size: 34px; }
+.media-placeholder strong { font-size: 14px; }
+.media-card-body { padding: 12px; gap: 7px; }
+.media-card-title { font-size: 15px; line-height: 1.34; }
+.notify-output-panel, .share-card-preview-panel { padding: 14px; }
+.course-share-card-preview { padding: 13px; border-radius: 15px; }
+.qr-card img { width: 190px; height: 190px; }
+.qr-card { gap: 8px; }
+
+/* 手機版：卡片保留可點選面積，但降低高度與留白 */
+@media (max-width: 1080px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-card { display: none; }
+}
+@media (max-width: 760px) {
+  .main { padding: 12px; }
+  .hero { padding: 15px; border-radius: 20px; }
+  .hero h1 { font-size: 23px; }
+  .hero p { font-size: 13px; line-height: 1.55; }
+  .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
+  .kpi-card { padding: 11px 12px; min-height: 78px; }
+  .kpi-card strong { font-size: 22px; }
+  .toolbar, .panel-head { gap: 8px; margin-bottom: 9px; }
+  .panel { padding: 12px; border-radius: 16px; }
+  .card-grid, .record-grid, .media-grid, .dashboard-quick-grid { grid-template-columns: 1fr; gap: 9px; }
+  .item-card, .knowledge-card, .prep-course-card, .group-card, .dashboard-quick-card, .dashboard-alert-card,
+  .planning-row, .planning-demand-item, .announcement-card, .media-card { padding: 11px 12px; border-radius: 15px; }
+  .card-title { font-size: 16px; margin-bottom: 4px; }
+  .card-meta { font-size: 12px; line-height: 1.45; }
+  .badge-row { gap: 4px; margin: 6px 0; }
+  .badge, .filter-pill { font-size: 10.5px; padding: 4px 7px; }
+  .card-actions { gap: 5px; margin-top: 7px; }
+  .mini-btn { min-height: 32px; padding: 6px 7px; }
+  .timeline-item { grid-template-columns: 1fr; padding: 10px; gap: 5px; }
+  .form-grid { padding: 12px; gap: 8px; }
+  .modal-backdrop { padding: 8px; align-items: end; }
+  .modal-head { padding: 13px 14px; }
+  .data-table td { padding: 9px 8px; }
+  .qr-card img { width: 160px; height: 160px; }
+}
+@media (max-width: 420px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .primary-btn, .ghost-btn, .danger-btn, .file-btn { width: 100%; }
+}
+
+/* PKG033-2: 實際逐頁檢查後再壓縮內容型卡片
+   這段專門處理資料內容過多造成的超高卡片：課後紀錄、公告、會員名錄、課前分工、年度報表、主題規劃、分享卡、匯入/同步/設定。 */
+textarea.form-control { min-height: 72px; max-height: 140px; resize: vertical; }
+.csv-paste { min-height: 120px; max-height: 180px; }
+.notify-output, .share-card-output { min-height: 180px; max-height: 320px; }
+
+/* 一般資料卡片：內容過長時在卡片內捲動，避免一張卡佔滿整頁 */
+.record-card, .announcement-card, .speaker-card, .sponsor-card, .prep-course-card, .member-grid .item-card, .location-grid .item-card {
+  max-height: 330px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.record-card::-webkit-scrollbar, .announcement-card::-webkit-scrollbar, .speaker-card::-webkit-scrollbar,
+.sponsor-card::-webkit-scrollbar, .prep-course-card::-webkit-scrollbar, .member-grid .item-card::-webkit-scrollbar,
+.location-grid .item-card::-webkit-scrollbar { width: 6px; }
+.record-card::-webkit-scrollbar-thumb, .announcement-card::-webkit-scrollbar-thumb, .speaker-card::-webkit-scrollbar-thumb,
+.sponsor-card::-webkit-scrollbar-thumb, .prep-course-card::-webkit-scrollbar-thumb, .member-grid .item-card::-webkit-scrollbar-thumb,
+.location-grid .item-card::-webkit-scrollbar-thumb { background: rgba(139,90,43,.22); border-radius: 999px; }
+
+.record-card .muted, .announcement-line-text, .media-card-body p, .card-meta, .notice, .prep-task-main span, .small-note {
+  font-size: 12.5px;
+}
+.record-section p, .knowledge-block p, .media-card-body p, .announcement-line-text, .notice {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.record-card:hover .record-section p,
+.knowledge-card:hover .knowledge-block p,
+.announcement-card:hover .announcement-line-text,
+.media-card:hover .media-card-body p,
+.notice:hover {
+  -webkit-line-clamp: unset;
+}
+.record-sections { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.record-section, .knowledge-block { min-height: 0; }
+
+/* 大面板內改用小型格狀排列 */
+.report-bars { gap: 8px; }
+#reportMonthlyBars {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  align-items: stretch;
+}
+#reportMonthlyBars .report-bar-row {
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 9px 10px;
+  min-height: 82px;
+}
+#reportMonthlyBars .report-bar-label span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-bar-track { height: 8px; }
+.report-bar-value { font-size: 13px; text-align: left; }
+
+.planning-category-list {
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  align-items: start;
+}
+.planning-row {
+  min-height: 0;
+  padding: 10px 11px;
+}
+.planning-row-main { align-items: flex-start; }
+.planning-row-main .badge { white-space: nowrap; }
+.planning-row .small-note {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 表單與設定頁：不要一張表單面板過高 */
+.feedback-form-panel .form-grid,
+.reply-panel .form-grid,
+.share-card-layout .form-grid,
+.settings-page .form-grid,
+.sync-layout .form-grid,
+.import-layout .form-grid,
+.course-import-layout .form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+}
+.feedback-form-panel,
+.reply-panel,
+.share-card-layout .panel,
+.settings-page .panel,
+.sync-layout .panel,
+.import-layout .panel,
+.course-import-layout .panel {
+  max-height: 560px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.share-card-preview-panel { max-height: 560px; overflow: auto; }
+.course-share-card-preview { max-height: 260px; overflow: auto; }
+.notify-summary { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.notify-options { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+
+/* 課前分工任務清單在卡片內緊湊排列 */
+.prep-task-list { gap: 7px; }
+.prep-task-row { grid-template-columns: minmax(0, 1fr) auto; padding: 8px 9px; }
+.prep-task-controls { grid-column: 1 / -1; justify-content: flex-start; }
+.prep-progress { height: 8px; margin: 8px 0 8px; }
+.prep-actions { margin: 8px 0 10px; }
+
+/* 會員、地點資料卡：保留重點，長介紹限制高度 */
+.member-grid .item-card .muted,
+.location-grid .item-card .muted {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.member-grid .item-card:hover .muted,
+.location-grid .item-card:hover .muted { -webkit-line-clamp: unset; }
+
+/* 儀表板工作台面板不再拉太高 */
+.dashboard-workbench { max-height: 320px; overflow: auto; }
+.dashboard-workbench .panel-head { margin-bottom: 9px; }
+.dashboard-quick-grid { grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); }
+.dashboard-quick-card { min-height: 96px; }
+
+@media (max-width: 760px) {
+  .record-card, .announcement-card, .speaker-card, .sponsor-card, .prep-course-card, .member-grid .item-card, .location-grid .item-card {
+    max-height: 300px;
+  }
+  .feedback-form-panel, .reply-panel, .share-card-layout .panel, .settings-page .panel, .sync-layout .panel, .import-layout .panel, .course-import-layout .panel, .share-card-preview-panel {
+    max-height: none;
+  }
+  .record-sections, .planning-category-list, #reportMonthlyBars { grid-template-columns: 1fr; }
+  #reportMonthlyBars .report-bar-row { min-height: auto; }
+}
+
+/* PKG033-3: 所有頁面面板最高高度統一限制
+   經桌機逐頁測試後，將長表單/長說明/長統計面板改為卡片內捲動，避免單一卡片過大。 */
+.view .panel {
+  max-height: 380px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.view .panel::-webkit-scrollbar { width: 6px; height: 6px; }
+.view .panel::-webkit-scrollbar-thumb { background: rgba(139,90,43,.22); border-radius: 999px; }
+.dashboard-workbench,
+.reply-panel,
+.feedback-form-panel,
+.share-card-layout .panel,
+.share-card-preview-panel,
+.settings-page .panel,
+.sync-layout .panel,
+.import-layout .panel,
+.course-import-layout .panel {
+  max-height: 380px;
+}
+.report-hero-panel, .planning-hero-panel, .speaker-hero-panel, .prep-hero-panel, .group-hero-panel,
+.checkin-hero-panel, .media-hero-panel, .feedback-hero-panel, .announcement-hero-panel {
+  max-height: 340px;
+}
+@media (max-width: 760px) {
+  .view .panel { max-height: 360px; }
+  .dashboard-workbench,
+  .reply-panel,
+  .feedback-form-panel,
+  .share-card-layout .panel,
+  .share-card-preview-panel,
+  .settings-page .panel,
+  .sync-layout .panel,
+  .import-layout .panel,
+  .course-import-layout .panel { max-height: 360px; }
+}
+
+/* PKG033-4: 修正年度課程精簡卡片 class 名稱，手機版不再因換行變過高 */
+.course-card-compact {
+  max-height: 300px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.course-card-compact::-webkit-scrollbar { width: 6px; }
+.course-card-compact::-webkit-scrollbar-thumb { background: rgba(139,90,43,.22); border-radius: 999px; }
+.course-card-compact .card-title { font-size: 16px; line-height: 1.22; }
+.course-card-compact .card-meta { font-size: 12.2px; line-height: 1.36; }
+.course-card-compact .badge-row { margin: 6px 0; }
+.course-card-compact .card-actions { margin-top: 6px; }
+@media (max-width: 760px) {
+  .course-card-compact { max-height: 290px; }
+}
+
+
+/* PKG036：年度課表排序分隔、地點卡片與出席回覆面板優化 */
+.course-year-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(139, 90, 43, .18);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 248, 236, .96), rgba(255, 255, 255, .9));
+  box-shadow: 0 8px 18px rgba(139, 90, 43, .06);
+}
+.course-year-divider span {
+  font-size: 18px;
+  font-weight: 950;
+  color: var(--primary-dark);
+}
+.course-year-divider small {
+  color: var(--muted);
+  font-weight: 800;
+}
+.location-grid .item-card .card-meta {
+  margin-bottom: 4px;
+}
+#view-reply .reply-panel,
+#view-attendance .reply-link-panel,
+#view-attendance .panel {
+  max-height: 720px;
+}
+#view-reply .member-signup-layout {
+  min-height: 520px;
+}
+#view-reply .form-control {
+  min-height: 44px;
+}
+#view-reply textarea.form-control {
+  min-height: 118px;
+}
+#view-reply .public-signup-admin-box .table-wrap {
+  max-height: 360px;
+  overflow: auto;
+}
+@media (max-width: 760px) {
+  .course-year-divider {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 12px;
+  }
+  #view-reply .reply-panel,
+  #view-attendance .reply-link-panel,
+  #view-attendance .panel {
+    max-height: none;
+  }
+  #view-reply .member-signup-layout {
+    min-height: auto;
+  }
+}
+
+
+/* PKG037：會員回覆只顯示未上課課程，地點卡片再精簡 */
+.location-card-simple {
+  max-height: 210px;
+  min-height: 0;
+  padding: 12px 14px;
+}
+.location-card-simple .card-top { margin-bottom: 6px; }
+.location-card-simple .card-title { font-size: 15.5px; line-height: 1.2; }
+.location-card-simple .eyebrow { margin-bottom: 2px; }
+.location-line {
+  color: var(--muted);
+  font-size: 12.8px;
+  font-weight: 800;
+  line-height: 1.38;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 2px 0;
+}
+.location-card-simple .compact-actions { margin-top: 8px; gap: 6px; }
+.location-card-simple .mini-btn { padding: 6px 9px; font-size: 12px; }
+@media (max-width: 760px) {
+  .location-card-simple { max-height: none; }
+  .location-line { white-space: normal; }
+}
+
+
+/* PKG038：課程卡片 3 欄放大、地點卡片 4 欄、報名欄位文字修正 */
+#view-courses .course-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+#view-courses .course-card-compact {
+  padding: 17px 18px 16px;
+  border-radius: 20px;
+  max-height: none;
+  min-height: 255px;
+}
+#view-courses .course-card-compact .eyebrow {
+  font-size: 12px;
+}
+#view-courses .course-card-compact .card-title {
+  font-size: 19px;
+  line-height: 1.34;
+  margin: 3px 0 8px;
+  -webkit-line-clamp: 2;
+}
+#view-courses .course-card-compact .card-meta {
+  font-size: 14.2px;
+  line-height: 1.55;
+}
+#view-courses .course-card-compact .badge {
+  font-size: 12px;
+  padding: 5px 9px;
+}
+#view-courses .course-card-compact .mini-btn {
+  font-size: 13px;
+  padding: 8px 10px;
+  min-height: 35px;
+}
+#view-courses .course-card-compact .card-actions {
+  margin-top: 11px;
+  gap: 7px;
+}
+#view-locations .location-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+#view-locations .location-card-simple {
+  padding: 13px 14px;
+  border-radius: 16px;
+}
+#view-locations .location-card-simple .card-title {
+  font-size: 16px;
+}
+#view-locations .location-line {
+  font-size: 12.5px;
+}
+#replyFarmOrName::placeholder {
+  color: rgba(108, 83, 58, .68);
+}
+@media (max-width: 1240px) {
+  #view-locations .location-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1080px) {
+  #view-courses .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #view-locations .location-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  #view-courses .course-grid,
+  #view-locations .location-grid { grid-template-columns: 1fr; }
+  #view-courses .course-card-compact { min-height: 0; padding: 14px; }
+  #view-courses .course-card-compact .card-title { font-size: 17px; }
+}
+
+
+/* PKG039：已完成課程提示與回覆按鈕停用 */
+.course-completed-card {
+  background: linear-gradient(135deg, rgba(245, 247, 244, .98), rgba(255, 255, 255, .92));
+  border-color: rgba(85, 120, 89, .28);
+  box-shadow: 0 10px 24px rgba(74, 93, 76, .08);
+}
+.course-completed-card .card-title,
+.course-completed-card .card-meta {
+  color: rgba(68, 76, 67, .92);
+}
+.course-completed-notice {
+  margin: 8px 0 2px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(226, 240, 225, .82);
+  border: 1px solid rgba(80, 126, 82, .22);
+  color: #3f6f45;
+  font-size: 13px;
+  font-weight: 950;
+  line-height: 1.35;
+}
+.course-completed-badge {
+  background: #e5f4e2 !important;
+  color: #336b38 !important;
+  border-color: rgba(70, 128, 76, .28) !important;
+}
+.mini-btn.disabled-reply,
+.mini-btn.disabled-reply[disabled] {
+  cursor: not-allowed !important;
+  background: #e7e3dc !important;
+  color: #8a8175 !important;
+  border-color: rgba(126, 116, 103, .32) !important;
+  opacity: .9;
+  filter: grayscale(.18);
+}
+#view-courses .course-completed-card .card-actions {
+  border-top: 1px dashed rgba(92, 112, 93, .18);
+  padding-top: 8px;
+}
+
+/* PKG040 dashboard course progress and parking link refinements */
+.inline-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.10);
+  color: #1d4ed8;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+}
+.inline-map-link::before { content: '🅿️'; }
+.inline-map-link:hover { background: rgba(37, 99, 235, 0.16); }
+.timeline-year-divider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 0 6px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  font-weight: 900;
+  color: #0f172a;
+}
+.timeline-year-divider small {
+  color: #64748b;
+  font-weight: 700;
+}
+
+
+/* PKG043：大面板與欄位高度修正、頁面重新規劃，盡量取消卡片/面板內層捲軸 */
+.view .panel,
+.dashboard-workbench,
+.reply-panel,
+.feedback-form-panel,
+.share-card-layout .panel,
+.share-card-preview-panel,
+.settings-page .panel,
+.sync-layout .panel,
+.import-layout .panel,
+.course-import-layout .panel,
+.report-hero-panel,
+.planning-hero-panel,
+.speaker-hero-panel,
+.prep-hero-panel,
+.group-hero-panel,
+.checkin-hero-panel,
+.media-hero-panel,
+.feedback-hero-panel,
+.announcement-hero-panel,
+.record-card,
+.announcement-card,
+.speaker-card,
+.sponsor-card,
+.invite-card,
+.prep-course-card,
+.member-grid .item-card,
+.location-grid .item-card,
+.course-card-compact,
+.course-share-card-preview,
+.notify-output-panel,
+#view-reply .public-signup-admin-box .table-wrap,
+.public-signup-admin-box,
+.reply-link-panel {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* 內容文字不再 hover 才展開，避免卡片內捲動 */
+.record-section p,
+.knowledge-block p,
+.media-card-body p,
+.announcement-line-text,
+.notice,
+.member-grid .item-card .muted,
+.location-grid .item-card .muted,
+.planning-row .small-note {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  overflow: visible !important;
+}
+
+/* 課後資料中心：卡片加大，一行三張，近期課程在 app.js 已改為上方 */
+#view-records .record-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+#view-records .record-card {
+  padding: 18px 20px;
+  border-radius: 22px;
+  min-height: 360px;
+}
+#view-records .record-card .card-title {
+  font-size: 19px;
+  line-height: 1.36;
+}
+#view-records .record-card .card-meta {
+  font-size: 14px;
+  line-height: 1.6;
+}
+#view-records .record-sections {
+  grid-template-columns: 1fr;
+  gap: 11px;
+}
+#view-records .record-block {
+  padding: 12px 13px;
+}
+@media (max-width: 1180px) {
+  #view-records .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  #view-records .record-grid { grid-template-columns: 1fr; }
+  #view-records .record-card { min-height: 0; padding: 15px; }
+}
+
+/* 會員課後回饋表：欄位上下加高 */
+#view-feedback .feedback-layout {
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr);
+  gap: 18px;
+}
+#view-feedback .feedback-form-panel .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+#view-feedback .form-control {
+  min-height: 48px;
+  font-size: 15px;
+}
+#view-feedback textarea.form-control {
+  min-height: 150px !important;
+  max-height: none !important;
+  resize: vertical;
+}
+#view-feedback #feedbackNextTopic {
+  min-height: 52px;
+}
+@media (max-width: 900px) {
+  #view-feedback .feedback-layout { grid-template-columns: 1fr; }
+  #view-feedback .feedback-form-panel .form-grid { grid-template-columns: 1fr; }
+}
+
+/* 講師 / 主辦廠商 / 邀約中心：重新分區，不再讓表單卡在右側小欄 */
+#view-speakers .speaker-redesign-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+#view-speakers .speaker-redesign-layout > .invite-form-panel {
+  grid-column: 1 / -1;
+  position: static !important;
+}
+#view-speakers #speakerInviteCards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+#view-speakers .speaker-grid,
+#view-speakers .sponsor-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+#view-speakers .invite-form-panel .form-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+#view-speakers .invite-form-panel textarea.form-control {
+  min-height: 130px !important;
+  max-height: none !important;
+}
+#view-speakers .speaker-card,
+#view-speakers .sponsor-card,
+#view-speakers .invite-card {
+  padding: 16px 17px;
+  border-radius: 20px;
+}
+@media (max-width: 1180px) {
+  #view-speakers #speakerInviteCards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #view-speakers .speaker-grid,
+  #view-speakers .sponsor-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  #view-speakers .speaker-redesign-layout,
+  #view-speakers #speakerInviteCards,
+  #view-speakers .invite-form-panel .form-grid { grid-template-columns: 1fr; }
+}
+
+/* 幹部名單與分組責任區 */
+#view-groups .group-card-list {
+  display: grid;
+  gap: 18px;
+}
+.officer-roster-panel,
+.group-responsibility-panel {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: 0 12px 34px rgba(76, 47, 19, .08);
+}
+.officer-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.officer-card {
+  padding: 16px 17px;
+  border-radius: 20px;
+}
+.group-card-list-inner {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.compact-head { margin-bottom: 14px; }
+@media (max-width: 1120px) {
+  .officer-grid, .group-card-list-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .officer-grid, .group-card-list-inner { grid-template-columns: 1fr; }
+  .officer-roster-panel, .group-responsibility-panel { padding: 14px; border-radius: 18px; }
+}
+
+/* 年度主題規劃：改成分區式版面，不擠在小欄位 */
+#view-planning .planning-hero-panel {
+  padding: 20px;
+}
+#view-planning .planning-two-col {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+#view-planning .planning-category-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+#view-planning .planning-row {
+  padding: 16px;
+  border-radius: 20px;
+}
+#view-planning .planning-demand-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+#view-planning #planningSuggestions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+#view-planning .planning-month-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+#view-planning .planning-month-card {
+  min-height: 96px;
+  padding: 14px;
+  border-radius: 18px;
+}
+@media (max-width: 1180px) {
+  #view-planning .planning-category-list,
+  #view-planning #planningSuggestions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #view-planning .planning-month-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  #view-planning .planning-category-list,
+  #view-planning .planning-demand-list,
+  #view-planning #planningSuggestions,
+  #view-planning .planning-month-grid { grid-template-columns: 1fr; }
+}
+
+/* LINE 公告 / 分享卡 / 報名連結：欄位框加高 */
+#view-share-card .share-card-layout,
+#view-notify .notify-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(420px, .9fr);
+  gap: 18px;
+}
+#view-share-card .form-control,
+#view-notify .form-control {
+  min-height: 48px;
+  font-size: 15px;
+}
+#view-share-card textarea.form-control,
+#view-notify textarea.form-control {
+  min-height: 145px !important;
+  max-height: none !important;
+}
+#view-share-card .share-card-output,
+#view-notify .notify-output {
+  min-height: 420px !important;
+  max-height: none !important;
+}
+#view-share-card .course-share-card-preview {
+  min-height: 220px;
+}
+@media (max-width: 980px) {
+  #view-share-card .share-card-layout,
+  #view-notify .notify-layout { grid-template-columns: 1fr; }
+}
+
+/* 通用：textarea 盡量改高，不出現小框內捲軸 */
+textarea.form-control {
+  min-height: 120px !important;
+  max-height: none !important;
+  resize: vertical;
+}
+.csv-paste { min-height: 180px !important; max-height: none !important; }
+.table-wrap { max-height: none !important; }
+
+/* PKG045：課程講義上傳與餐廳資料自動帶入 */
+.autofill-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(139, 90, 43, .18);
+  background: rgba(255, 252, 246, .88);
+  border-radius: 16px;
+  color: var(--text);
+  line-height: 1.45;
+}
+.autofill-card strong { font-size: 14px; color: var(--accent); }
+.autofill-card span, .autofill-card a { font-size: 13.5px; }
+.autofill-card a { font-weight: 900; color: var(--accent); text-decoration: none; }
+.handout-manage-empty {
+  padding: 12px 14px;
+  border: 1px dashed rgba(139, 90, 43, .25);
+  border-radius: 16px;
+  background: rgba(255,255,255,.62);
+  color: var(--muted);
+  font-weight: 800;
+}
+.uploaded-handout-grid {
+  display: grid;
+  gap: 10px;
+}
+.uploaded-handout-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid rgba(139, 90, 43, .16);
+  border-radius: 14px;
+  background: rgba(255,255,255,.8);
+}
+.uploaded-handout-item small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.uploaded-handout-item a {
+  color: var(--accent);
+  font-weight: 900;
+  text-decoration: none;
+}
+.uploaded-handout-item em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.handout-file-list a { word-break: break-all; }
+@media (max-width: 720px) {
+  .uploaded-handout-item { grid-template-columns: 1fr; }
+}
+
+
+/* PKG048：會員出席回覆欄位排列與大小一致化 */
+#view-reply .reply-panel {
+  padding: 22px;
+}
+#view-reply #replyFormGrid {
+  padding: 0;
+  gap: 16px;
+}
+#view-reply .member-signup-layout {
+  align-items: start;
+}
+#view-reply .member-signup-form {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 16px 18px;
+}
+#view-reply .member-signup-form > .full,
+#view-reply .member-signup-form > .signup-confirmation {
+  grid-column: 1 / -1;
+}
+#view-reply .member-signup-form .form-field {
+  min-width: 0;
+  align-self: start;
+  grid-template-rows: auto 52px minmax(34px, auto);
+}
+#view-reply .member-signup-form .form-field label {
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+#view-reply .member-signup-form .form-control:not(textarea) {
+  width: 100%;
+  min-height: 52px;
+  height: 52px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+#view-reply .member-signup-form textarea.form-control {
+  width: 100%;
+  min-height: 132px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+#view-reply .member-signup-form .field-help {
+  display: block;
+  min-height: 34px;
+  margin-top: 2px;
+  line-height: 1.45;
+}
+#view-reply .signup-step.full {
+  grid-column: 1 / -1;
+  min-height: 46px;
+  margin: 2px 0 0;
+}
+#view-reply .sticky-signup-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+}
+#view-reply .sticky-signup-actions .ghost-btn,
+#view-reply .sticky-signup-actions .primary-btn {
+  min-height: 52px;
+  width: 100%;
+}
+@media (max-width: 860px) {
+  #view-reply .member-signup-form,
+  #view-reply .sticky-signup-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* PKG049：幹部名單、會員小卡片、分享卡預覽與一般會員報名連結優化 */
+#view-groups .toolbar h2::after {
+  content: "";
+}
+.member-grid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
+  gap: 12px !important;
+}
+.member-mini-card {
+  padding: 13px 14px !important;
+  border-radius: 16px !important;
+  min-height: 0 !important;
+}
+.member-mini-card .card-title {
+  font-size: 17px !important;
+  margin: 2px 0 5px !important;
+}
+.member-mini-card .eyebrow {
+  font-size: 11px !important;
+}
+.member-mini-card .badge {
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+}
+.member-mini-card .card-meta {
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+}
+.member-mini-card .member-mini-bio {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  margin: 8px 0 0 !important;
+  -webkit-line-clamp: 2 !important;
+}
+.member-mini-card .card-actions {
+  margin-top: 10px !important;
+  gap: 6px !important;
+}
+.member-mini-card .mini-btn {
+  padding: 6px 8px !important;
+  font-size: 12px !important;
+  border-radius: 10px !important;
+}
+#view-share-card .share-card-layout {
+  grid-template-columns: minmax(0, .92fr) minmax(520px, 1.08fr) !important;
+}
+#view-share-card .share-card-preview-panel {
+  max-height: none !important;
+  overflow: visible !important;
+}
+#view-share-card .course-share-card-preview {
+  min-height: 340px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 28px !important;
+  border-radius: 28px !important;
+  gap: 16px !important;
+}
+#view-share-card .course-share-card-preview h3 {
+  font-size: clamp(28px, 3.2vw, 40px) !important;
+}
+#view-share-card .share-card-meta span,
+#view-share-card .share-card-location {
+  font-size: 15px !important;
+  padding: 13px 14px !important;
+}
+#view-share-card .course-share-card-preview p {
+  font-size: 15px !important;
+  line-height: 1.9 !important;
+}
+#view-share-card .share-card-stat-row strong {
+  font-size: 26px !important;
+}
+#view-share-card .share-card-output {
+  min-height: 520px !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+.member-signup-link-box {
+  margin-bottom: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(58, 115, 183, .22);
+  background: linear-gradient(135deg, rgba(242, 247, 255, .96), rgba(255,255,255,.9));
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+.member-signup-link-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.member-signup-link-head h3 { margin: 0; font-size: 20px; }
+.share-url.large-url {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.45;
+  word-break: break-all;
+}
+@media (max-width: 1120px) {
+  #view-share-card .share-card-layout { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 760px) {
+  .member-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .member-mini-card .card-top { display: block; }
+  #view-share-card .course-share-card-preview { min-height: 280px !important; padding: 20px !important; }
+}
+@media (max-width: 460px) {
+  .member-grid { grid-template-columns: 1fr !important; }
+}
+
+
+/* PKG050：LINE 公告 / 分享卡課程選單只顯示未上課程，並加大 LINE 貼文檢視欄位 */
+#view-share-card .share-card-layout {
+  grid-template-columns: minmax(360px, .75fr) minmax(680px, 1.25fr) !important;
+  align-items: start !important;
+}
+#view-share-card .share-card-preview-panel {
+  min-width: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+#view-share-card .share-output-label {
+  margin: 18px 0 8px;
+  color: var(--brand);
+  font-weight: 950;
+  font-size: 16px;
+}
+#view-share-card #shareCardOutput.share-card-output {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 760px !important;
+  max-height: none !important;
+  box-sizing: border-box !important;
+  padding: 20px 22px !important;
+  font-size: 16px !important;
+  line-height: 1.85 !important;
+  border-radius: 22px !important;
+  background: rgba(255,255,255,.96) !important;
+}
+#view-share-card .course-share-card-preview {
+  min-height: 380px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+#view-share-card .member-signup-link-box {
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 1280px) {
+  #view-share-card .share-card-layout { grid-template-columns: 1fr !important; }
+  #view-share-card #shareCardOutput.share-card-output { min-height: 620px !important; }
+}
+@media (max-width: 760px) {
+  #view-share-card #shareCardOutput.share-card-output { min-height: 520px !important; font-size: 15px !important; }
+}
+
+/* PKG051：讓分享卡版型與語氣變動在預覽卡上更明顯 */
+.share-card-opening {
+  margin: 12px 0 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(139, 90, 43, 0.10);
+  border: 1px solid rgba(139, 90, 43, 0.18);
+  color: #4a2f1d;
+  font-size: 17px;
+  line-height: 1.7;
+}
+#view-share-card #shareCardTemplate,
+#view-share-card #shareCardTone {
+  font-weight: 700;
+}
+
+
+/* PKG057：首頁主視覺改為使用者提供的書法豬隻橫幅背景，移除原標題文字。 */
+.hero-banner {
+  min-height: 280px;
+  grid-template-columns: 1fr;
+  align-items: end;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(70,40,18,.20)),
+    url('hero-banner-calligraphy-pigs.png');
+  background-size: cover;
+  background-position: 22% center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+.hero-banner::after { content: none; }
+.hero-content-minimal {
+  display: flex;
+  align-items: end;
+  min-height: 100%;
+}
+.hero-actions-floating {
+  width: fit-content;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: rgba(255, 248, 238, .46);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(63, 36, 14, .14);
+}
+.hero-banner .hero-actions .ghost-btn,
+.hero-banner .hero-actions .primary-btn {
+  border-color: rgba(115, 74, 34, .25);
+  background: rgba(255,255,255,.82);
+  color: #5b371a;
+}
+.hero-banner .hero-actions .primary-btn {
+  background: linear-gradient(135deg, rgba(167, 109, 52, .92), rgba(116, 66, 24, .96));
+  color: #fff8f0;
+}
+@media (max-width: 900px) {
+  .hero-banner { min-height: 220px; background-position: 18% center; }
+  .hero-actions-floating { width: 100%; padding: 10px; }
+}
+@media (max-width: 640px) {
+  .hero-banner { min-height: 165px; padding: 14px; }
+  .hero-actions-floating { border-radius: 14px; }
+}
+
+
+/* PKG058：上方主視覺按鈕移到欄位右上角。 */
+.hero-banner {
+  align-items: start;
+}
+.hero-content-minimal {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  left: auto;
+  bottom: auto;
+  width: auto;
+  min-height: 0;
+  display: block;
+  z-index: 3;
+}
+.hero-actions-floating {
+  width: auto;
+  max-width: min(760px, calc(100vw - 360px));
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+@media (max-width: 1100px) {
+  .hero-actions-floating {
+    max-width: calc(100vw - 120px);
+  }
+}
+@media (max-width: 900px) {
+  .hero-content-minimal {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+  .hero-actions-floating {
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 640px) {
+  .hero-content-minimal {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+  .hero-actions-floating {
+    padding: 8px;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .hero-banner .hero-actions .ghost-btn,
+  .hero-banner .hero-actions .primary-btn {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+
+/* PKG062：GitHub Pages 連結來源與設定中心提示 */
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+#settingsLinkSourceNote {
+  margin-bottom: 12px;
+}
+.share-url {
+  word-break: break-all;
+}
+
+/* PKG065：公告中心連動課程表蓋章提醒 */
+.course-has-announcement {
+  border-color: rgba(185, 72, 45, .34) !important;
+  box-shadow: 0 16px 36px rgba(185, 72, 45, .10), 0 8px 18px rgba(112, 74, 48, .08);
+}
+.course-has-announcement::before {
+  background: linear-gradient(90deg, #b91c1c, #f59e0b, var(--brand-3));
+}
+.course-announcement-stamp {
+  position: absolute;
+  top: 14px;
+  right: 96px;
+  z-index: 3;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 76px;
+  min-height: 50px;
+  padding: 6px 10px;
+  border: 3px solid currentColor;
+  border-radius: 14px;
+  background: rgba(255, 250, 244, .86);
+  box-shadow: 0 8px 18px rgba(113, 62, 32, .12);
+  transform: rotate(-8deg);
+  letter-spacing: .08em;
+  text-align: center;
+  pointer-events: none;
+}
+.course-announcement-stamp span {
+  font-size: 15px;
+  font-weight: 1000;
+  line-height: 1.05;
+}
+.course-announcement-stamp small {
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.course-announcement-stamp.danger { color: #b91c1c; }
+.course-announcement-stamp.warn { color: #b45309; }
+.course-announcement-stamp.info { color: #1d4ed8; }
+.course-announcement-alert {
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(185, 72, 45, .24);
+  background: linear-gradient(135deg, rgba(255, 247, 237, .96), rgba(255, 255, 255, .86));
+}
+.course-announcement-alert-title {
+  font-size: 13px;
+  font-weight: 1000;
+  color: #9a3412;
+  margin-bottom: 6px;
+}
+.course-announcement-row {
+  display: grid;
+  gap: 3px;
+  padding: 7px 0;
+  border-top: 1px dashed rgba(185, 72, 45, .20);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.course-announcement-row:first-of-type { border-top: 0; }
+.course-announcement-row strong { color: #7c2d12; }
+.course-announcement-row span {
+  color: #5f4b3c;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.course-announcement-row small { color: rgba(95, 75, 60, .75); font-weight: 800; }
+.course-announcement-row.danger strong { color: #991b1b; }
+.course-announcement-row.warn strong { color: #92400e; }
+.course-announcement-row.info strong { color: #1d4ed8; }
+.course-announcement-more {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #7c2d12;
+  font-weight: 900;
+}
+@media (max-width: 760px) {
+  .course-announcement-stamp {
+    position: static;
+    width: fit-content;
+    min-height: 38px;
+    margin: 2px 0 8px auto;
+    transform: rotate(-4deg);
+  }
+}
+.course-announcement-alert-title + .course-announcement-row { border-top: 0; }
+
+/* PKG066：上課日期異動才要求重新出席回覆；單純時間異動只提示不重置 */
+.course-needs-reconfirm {
+  border-color: rgba(185, 28, 28, .42) !important;
+  box-shadow: 0 16px 38px rgba(185, 28, 28, .12), 0 8px 18px rgba(112, 74, 48, .08);
+}
+.course-needs-reconfirm::before {
+  background: linear-gradient(90deg, #b91c1c, #ef4444, #f59e0b) !important;
+}
+.course-reconfirm-stamp {
+  right: 18px !important;
+  top: 14px !important;
+  color: #b91c1c !important;
+  background: rgba(255, 241, 239, .90) !important;
+}
+.course-needs-reconfirm .course-announcement-stamp:not(.course-reconfirm-stamp) {
+  right: 112px;
+}
+.course-reconfirm-notice {
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(185, 28, 28, .24);
+  background: linear-gradient(135deg, rgba(255, 241, 239, .96), rgba(255, 255, 255, .90));
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 950;
+  line-height: 1.5;
+}
+.course-reconfirm-notice small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(127, 29, 29, .82);
+  font-size: 12px;
+  font-weight: 850;
+}
+@media (max-width: 760px) {
+  .course-reconfirm-stamp { right: 12px !important; }
+  .course-needs-reconfirm .course-announcement-stamp:not(.course-reconfirm-stamp) { right: 96px; }
+}
+
+/* PKG068：手機版使用順暢優化與 GitHub 上線前整理 */
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    -webkit-text-size-adjust: 100%;
+  }
+  .app-shell { min-height: 100dvh; }
+  .main {
+    padding: 10px;
+    padding-bottom: calc(106px + env(safe-area-inset-bottom));
+  }
+  .sidebar {
+    width: min(88vw, 340px);
+    max-width: min(88vw, 340px);
+    padding: 16px;
+    border-radius: 0 22px 22px 0;
+  }
+  .sidebar .brand-block { margin-bottom: 10px; }
+  .sidebar .brand-logo-image { max-height: 104px; object-fit: contain; }
+  .sidebar .mode-pill { margin-bottom: 8px; }
+  .sidebar .nav-list { gap: 7px; padding-bottom: 18px; }
+  .sidebar .nav-item {
+    min-height: 48px;
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+  .sidebar .nav-item small { display: none; }
+  .nav-section-title {
+    margin-top: 7px;
+    padding: 7px 5px 5px;
+    font-size: 11px;
+  }
+  .sidebar-footer { display: none; }
+
+  .hero-banner {
+    min-height: 150px;
+    border-radius: 18px;
+    background-position: 24% center;
+  }
+  .hamburger {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    z-index: 4;
+    background: rgba(55, 34, 18, .66);
+    box-shadow: 0 8px 22px rgba(40, 23, 10, .20);
+  }
+  .hero-content-minimal {
+    top: auto;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+  .hero-actions-floating {
+    width: 100%;
+    max-width: 100%;
+    padding: 7px;
+    border-radius: 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .hero-actions-floating::-webkit-scrollbar { display: none; }
+  .hero-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 6px;
+    margin-top: 0;
+    scrollbar-width: none;
+  }
+  .hero-actions::-webkit-scrollbar { display: none; }
+  .hero-actions button,
+  .hero-banner .hero-actions .ghost-btn,
+  .hero-banner .hero-actions .primary-btn {
+    width: auto !important;
+    min-width: max-content;
+    flex: 0 0 auto;
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .toolbar,
+  .panel-head {
+    align-items: stretch;
+    gap: 8px;
+  }
+  .toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .toolbar-actions > *,
+  .stack-actions > *,
+  .form-actions > * {
+    min-height: 44px;
+  }
+  .search-input,
+  .select-input,
+  .form-control,
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  textarea {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  textarea.form-control { min-height: 96px; }
+  .card-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .card-actions .mini-btn,
+  .card-actions .ghost-btn,
+  .card-actions .primary-btn,
+  .card-actions .danger-btn {
+    width: 100%;
+    min-height: 40px;
+  }
+  .table-wrap { margin-inline: -2px; }
+  .table-wrap::before { display: block; }
+  .data-table { min-width: 680px; }
+  .modal-backdrop {
+    align-items: end;
+    padding: 6px;
+  }
+  .modal {
+    width: 100%;
+    max-height: calc(100dvh - 12px);
+    border-radius: 22px 22px 12px 12px;
+  }
+  .modal-head {
+    padding: 13px 14px;
+  }
+  .modal .form-actions {
+    padding: 12px 0 max(8px, env(safe-area-inset-bottom));
+  }
+  .toast {
+    bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 60;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    padding: 7px;
+    border-radius: 22px;
+    background: rgba(48, 31, 17, .93);
+    border: 1px solid rgba(255, 244, 223, .16);
+    box-shadow: 0 14px 44px rgba(38, 21, 8, .34);
+    backdrop-filter: blur(18px);
+  }
+  .mobile-bottom-nav .nav-item {
+    min-height: 52px;
+    padding: 6px 3px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    gap: 2px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.1;
+    color: #fff4df;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: none;
+    transform: none;
+  }
+  .mobile-bottom-nav .nav-item span { font-weight: 950; }
+  .mobile-bottom-nav .mobile-nav-icon {
+    display: block;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .mobile-bottom-nav .nav-item.active,
+  .mobile-bottom-nav .nav-item:hover {
+    background: #fff4df;
+    color: #4d2b13;
+    transform: none;
+  }
+  .mobile-bottom-nav .mobile-more-btn {
+    background: rgba(232,197,148,.18);
+  }
+}
+@media (max-width: 420px) {
+  .mobile-bottom-nav {
+    gap: 4px;
+    padding: 6px;
+  }
+  .mobile-bottom-nav .nav-item {
+    min-height: 50px;
+    font-size: 10.5px;
+  }
+  .card-actions { grid-template-columns: 1fr; }
+}
+@media (min-width: 761px) {
+  .mobile-bottom-nav { display: none !important; }
+}
+@media print {
+  .mobile-bottom-nav,
+  .hamburger { display: none !important; }
+}
+
+/* PKG069：手機修正 — 背景縮小、側欄收合、底部快捷列穩定、PWA 小豬圖示 */
+.sidebar-close {
+  display: none;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 244, 223, .22);
+  border-radius: 14px;
+  background: rgba(255, 244, 223, .13);
+  color: #fff4df;
+  font-size: 24px;
+  font-weight: 950;
+  line-height: 1;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .16);
+}
+.sidebar-close:hover,
+.sidebar-close:focus-visible {
+  background: rgba(255, 244, 223, .23);
+  outline: 3px solid rgba(255, 244, 223, .20);
+}
+@media (max-width: 1080px) {
+  .sidebar.open { z-index: 80; }
+}
+@media (max-width: 760px) {
+  .sidebar { padding-top: 58px; }
+  .sidebar-close { display: inline-grid; place-items: center; }
+  body.sidebar-open { overflow: hidden; }
+  body.sidebar-open::before { z-index: 70; }
+  .hero-banner {
+    min-height: 138px;
+    background-color: #fff2dc;
+    background-size: 165% auto;
+    background-position: 8% center;
+  }
+  .hero-content-minimal {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+  .hero-actions-floating {
+    background: rgba(255, 248, 238, .70);
+  }
+  .mobile-bottom-nav {
+    z-index: 75;
+    touch-action: manipulation;
+  }
+  .mobile-bottom-nav .nav-item {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .mobile-bottom-nav .nav-item:active {
+    transform: scale(.98);
+  }
+}
+@media (max-width: 420px) {
+  .hero-banner {
+    min-height: 132px;
+    background-size: 176% auto;
+    background-position: 7% center;
+  }
+  .hero-actions-floating { padding: 6px; }
+}
+@media (max-width: 760px) {
+  body.sidebar-open .mobile-bottom-nav { z-index: 65; pointer-events: none; }
+}
+
+/* PKG070：手機底部快捷列單次點擊修正
+   - 移除手機版 content-visibility / contain 造成的 iOS、LINE 內建瀏覽器延遲繪製
+   - 快捷列按鈕不再依賴 hover / focus 才更新畫面
+   - 切頁時強制 active view 保持可見，避免第一次點擊閃現後空白 */
+@media (max-width: 760px) {
+  .view,
+  .view.active,
+  .view.mobile-view-force-paint,
+  body.mobile-nav-rendering .view.active {
+    content-visibility: visible !important;
+    contain: none !important;
+  }
+  .view[hidden] {
+    display: none !important;
+  }
+  .view.active,
+  .view.mobile-view-force-paint,
+  body.mobile-nav-rendering .view.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .mobile-bottom-nav {
+    isolation: isolate;
+    pointer-events: auto;
+  }
+  .mobile-bottom-nav .nav-item {
+    touch-action: manipulation;
+    pointer-events: auto;
+    -webkit-touch-callout: none;
+  }
+  .mobile-bottom-nav .nav-item:focus {
+    outline: none;
+  }
+  .mobile-bottom-nav .nav-item:focus-visible {
+    outline: 3px solid rgba(255, 244, 223, .35);
+    outline-offset: 2px;
+  }
+}
+
+/* PKG071: mobile admin stabilization and direct check-in refinements */
+[hidden] { display: none !important; }
+body { overflow-x: hidden; }
+.main, .view, .panel, .toolbar, .card-grid, .table-wrap { max-width: 100%; }
+.mobile-bottom-nav { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.mobile-bottom-nav .nav-item { touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer; }
+body.mobile-nav-rendering .view.active,
+.view.mobile-view-force-paint {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  content-visibility: visible !important;
+}
+.direct-checkin-box {
+  margin-top: 16px;
+  border: 1px solid rgba(139,90,43,.16);
+  background: linear-gradient(135deg, rgba(255,248,237,.95), rgba(255,255,255,.9));
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 14px 32px rgba(90,58,33,.08);
+}
+.direct-checkin-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(220px, 1.2fr) auto auto;
+  gap: 10px;
+  align-items: center;
+}
+.direct-checkin-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.direct-checkin-chip {
+  border: 1px solid rgba(139,90,43,.15);
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.74);
+  color: var(--brand-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 900;
+}
+.direct-checkin-chip span { color: var(--muted); font-size: 12px; font-weight: 800; }
+@media (max-width: 760px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+  body { padding-bottom: 94px; }
+  .main { padding: 10px; width: 100%; overflow: visible; }
+  .hero.hero-banner {
+    min-height: 132px;
+    background-size: min(58vw, 210px) auto, cover !important;
+    background-position: right 8px center, center !important;
+  }
+  .hero-actions.hero-actions-floating {
+    max-width: 100%;
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px;
+    scroll-snap-type: x proximity;
+  }
+  .hero-actions.hero-actions-floating button {
+    flex: 0 0 auto;
+    min-width: 86px;
+    width: auto;
+    scroll-snap-align: start;
+  }
+  .sidebar {
+    width: min(88vw, 340px);
+    max-width: min(88vw, 340px);
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    padding-bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: 80;
+  }
+  .sidebar.open { box-shadow: 0 0 0 999px rgba(0,0,0,.38), 18px 0 40px rgba(0,0,0,.25); }
+  .sidebar-close { position: sticky; top: 0; z-index: 5; margin-left: auto; }
+  .nav-list { overflow-y: auto; max-height: calc(100dvh - 190px); padding-right: 4px; padding-bottom: 28px; -webkit-overflow-scrolling: touch; }
+  .sidebar-footer { display: none; }
+  .view { display: none !important; content-visibility: visible !important; contain-intrinsic-size: auto !important; }
+  .view.active { display: block !important; min-height: calc(100dvh - 180px); }
+  .view .panel,
+  .dashboard-workbench,
+  .reply-panel,
+  .feedback-form-panel,
+  .share-card-layout .panel,
+  .share-card-preview-panel,
+  .settings-page .panel,
+  .sync-layout .panel,
+  .import-layout .panel,
+  .course-import-layout .panel,
+  .report-hero-panel, .planning-hero-panel, .speaker-hero-panel, .prep-hero-panel, .group-hero-panel,
+  .checkin-hero-panel, .media-hero-panel, .feedback-hero-panel, .announcement-hero-panel {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .toolbar, .panel-head { gap: 10px; }
+  .toolbar-actions { display: grid; grid-template-columns: 1fr; gap: 8px; width: 100%; }
+  .toolbar-actions > *, .form-control, .search-input, .select-input { width: 100%; min-height: 44px; font-size: 16px; }
+  .stack-actions, .card-actions { gap: 8px; }
+  .stack-actions > button, .stack-actions > .file-btn, .card-actions > button { flex: 1 1 100%; }
+  .table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+  .table-wrap::before { content: '表格可左右滑動'; display: inline-block; margin: 0 0 8px; color: var(--muted); font-size: 12px; font-weight: 900; }
+  table { min-width: 720px; }
+  .timeline { overflow-x: hidden; }
+  .timeline-item { min-width: 0; }
+  .mobile-bottom-nav {
+    left: 8px;
+    right: 8px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 90;
+    min-height: 62px;
+  }
+  .mobile-bottom-nav .nav-item {
+    min-width: 0;
+    min-height: 48px;
+    font-weight: 950;
+  }
+  .direct-checkin-row { grid-template-columns: 1fr; }
+  .direct-checkin-box { padding: 14px; border-radius: 20px; }
+  .direct-checkin-hints { display: grid; grid-template-columns: 1fr; }
+  .direct-checkin-chip { width: 100%; justify-content: space-between; border-radius: 16px; }
+  .modal { width: calc(100vw - 18px); max-height: calc(100dvh - 26px); overflow: auto; border-radius: 24px; }
+  .form-grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 760px) {
+  .hero-actions.hero-actions-floating { scroll-padding-left: 4px; }
+  .hero-actions.hero-actions-floating button { padding-left: 13px; padding-right: 13px; min-width: 92px; overflow: visible; }
+  .hero-actions.hero-actions-floating button:first-child { margin-left: 2px; }
+}
+
+/* PKG072：手機管理端主視覺修正：橫幅整體縮小、文字不再被裁切，按鈕列可橫向滑動。 */
+@media (max-width: 760px) {
+  .hero-banner {
+    min-height: 188px !important;
+    padding: 12px !important;
+    background-size: 100% auto !important;
+    background-position: center 12px !important;
+    background-color: #f6e1be;
+  }
+  .hero-content-minimal {
+    top: auto !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+  }
+  .hero-actions-floating {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: flex-start !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 7px !important;
+    gap: 8px !important;
+  }
+  .hero-actions-floating::-webkit-scrollbar { display: none; }
+  .hero-banner .hero-actions {
+    flex-wrap: nowrap !important;
+    width: max-content;
+    min-width: 100%;
+    justify-content: flex-start !important;
+  }
+  .hero-banner .hero-actions .ghost-btn,
+  .hero-banner .hero-actions .primary-btn {
+    flex: 0 0 auto;
+    min-width: 88px;
+    white-space: nowrap;
+  }
+}
+
+/* PKG072B：覆蓋 v71 的高權重手機背景設定；兩層背景分別指定，避免圖片仍維持 cover。 */
+@media (max-width: 760px) {
+  .hero.hero-banner {
+    min-height: 188px !important;
+    padding: 12px !important;
+    background-size: 100% 100%, 100% auto !important;
+    background-position: center center, center 12px !important;
+    background-repeat: no-repeat, no-repeat !important;
+  }
+  .hero.hero-banner .hero-content-minimal {
+    top: auto !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+  }
+  .hero.hero-banner .hero-actions.hero-actions-floating {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 7px !important;
+    gap: 8px !important;
+  }
+  .hero.hero-banner .hero-actions.hero-actions-floating::-webkit-scrollbar { display: none; }
+  .hero.hero-banner .hero-actions.hero-actions-floating button {
+    flex: 0 0 auto !important;
+    min-width: 88px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* PKG072C：手機漢堡按鈕移到右上，避免遮住左側書法標題。 */
+@media (max-width: 760px) {
+  .hero.hero-banner { min-height: 156px !important; }
+  .hero.hero-banner .hamburger {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 14px !important;
+    background: rgba(74, 47, 25, .50) !important;
+    color: #fff8ee !important;
+  }
+}
+
+/* PKG074：手機首頁統計卡片縮小，避免年度課程 / 未上課程 / 人次等卡片佔滿首屏。 */
+@media (max-width: 760px) {
+  #view-dashboard #kpiGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    margin: 8px 0 10px !important;
+  }
+  #view-dashboard #kpiGrid .kpi-card {
+    min-height: 50px !important;
+    padding: 7px 8px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 18px rgba(87, 53, 22, .08) !important;
+  }
+  #view-dashboard #kpiGrid .kpi-card::after {
+    width: 34px !important;
+    height: 34px !important;
+    right: -12px !important;
+    top: -12px !important;
+  }
+  #view-dashboard #kpiGrid .kpi-card span {
+    font-size: 10.5px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap;
+  }
+  #view-dashboard #kpiGrid .kpi-card strong {
+    font-size: 17px !important;
+    line-height: 1 !important;
+    margin-top: 3px !important;
+    word-break: break-all;
+  }
+}
+@media (max-width: 360px) {
+  #view-dashboard #kpiGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+/* PKG074：QR Code 掃描後的公開報到頁，先選已回覆名單；沒有回覆則現場新增報到。 */
+.public-checkin-select-card,
+.public-walkin-checkin-card {
+  display: grid;
+  gap: 14px;
+}
+.public-checkin-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.public-checkin-form-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+.public-walkin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.public-walkin-grid label,
+.public-walkin-note {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+.public-signup-row td:first-child strong::after {
+  content: ' 公開';
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(85, 133, 92, .12);
+  color: #3f7a46;
+  font-size: 10px;
+}
+@media (max-width: 760px) {
+  .public-checkin-form-row,
+  .public-walkin-grid {
+    grid-template-columns: 1fr;
+  }
+  .public-checkin-select-card,
+  .public-walkin-checkin-card {
+    gap: 11px;
+  }
+  .public-checkin-form-row .primary-btn,
+  .public-walkin-checkin-card .primary-btn {
+    width: 100%;
+  }
+}
+
+/* PKG076：手機操作精簡：下一堂課優先、管理工作台優先、底部列減少項目。 */
+.member-mobile-primary,
+.admin-mobile-workbench { display: none; }
+.mobile-primary-card {
+  border: 1px solid rgba(139,90,43,.16);
+  background: linear-gradient(135deg, rgba(255,250,243,.98), rgba(255,246,232,.92));
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: 0 14px 34px rgba(82,52,26,.10);
+  margin: 10px 0 8px;
+}
+.mobile-primary-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.mobile-primary-head h2 { margin: 0 0 5px; font-size: 20px; line-height: 1.25; }
+.mobile-primary-badge {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 7px 9px;
+  background: rgba(139,90,43,.11);
+  color: #6b3d1b;
+  font-weight: 950;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.mobile-primary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.mobile-primary-actions button { min-height: 42px; padding: 10px 8px; }
+.mobile-mini-notices { display: grid; gap: 6px; margin-top: 10px; }
+.mobile-mini-notices button {
+  border: 1px solid rgba(180,85,52,.18);
+  background: rgba(255,243,230,.9);
+  color: #7a351e;
+  text-align: left;
+  border-radius: 14px;
+  padding: 9px 10px;
+  font-weight: 900;
+}
+.admin-mobile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+.admin-mobile-stats span {
+  display: grid;
+  gap: 3px;
+  align-content: center;
+  min-height: 54px;
+  border: 1px solid rgba(139,90,43,.12);
+  background: rgba(255,255,255,.68);
+  border-radius: 15px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.admin-mobile-stats strong { font-size: 18px; line-height: 1; color: #5c3317; }
+.admin-mobile-stats small { font-size: 10.5px; line-height: 1.15; color: var(--muted); font-weight: 900; }
+@media (max-width: 760px) {
+  body.member-mode #memberMobilePrimary:not(:empty),
+  body.admin-mode #adminMobileWorkbench:not(:empty) { display: block; }
+  body.admin-mode #view-dashboard #kpiGrid { display: none !important; }
+  body.member-mode #view-dashboard #kpiGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    margin-top: 7px !important;
+    opacity: .95;
+  }
+  body.member-mode #view-dashboard .dashboard-workbench .panel-head,
+  body.admin-mode #view-dashboard .dashboard-workbench .panel-head,
+  body.member-mode #view-dashboard .dashboard-alert-grid,
+  body.admin-mode #view-dashboard .dashboard-alert-grid { display: none !important; }
+  #view-dashboard .dashboard-workbench { padding: 12px !important; margin-top: 9px; }
+  #view-dashboard .dashboard-quick-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  #view-dashboard .dashboard-quick-card {
+    min-height: 82px !important;
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+  #view-dashboard .dashboard-quick-card .quick-icon {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 17px !important;
+    margin-bottom: 5px !important;
+  }
+  #view-dashboard .dashboard-quick-card strong { font-size: 14px !important; }
+  #view-dashboard .dashboard-quick-card small { font-size: 11.5px !important; line-height: 1.3 !important; }
+  body.member-mode #view-dashboard .two-col,
+  body.admin-mode #view-dashboard .two-col { margin-top: 10px; }
+  body.member-mode #view-dashboard .timeline,
+  body.admin-mode #view-dashboard .timeline { max-height: none; }
+  .mobile-primary-card { padding: 13px; border-radius: 19px; margin-top: 8px; }
+  .mobile-primary-head h2 { font-size: 17px; }
+  .mobile-primary-badge { font-size: 11px; padding: 6px 8px; max-width: 118px; overflow: hidden; text-overflow: ellipsis; }
+  .mobile-primary-actions { grid-template-columns: 1fr; gap: 7px; }
+  .admin-mobile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mobile-bottom-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .public-checkin-summary-row .badge { font-size: 11px; padding: 5px 7px; }
+  .public-checkin-select-card p.muted,
+  .public-walkin-checkin-card p.muted { margin: 0; line-height: 1.45; }
+  .public-checkin-select-card,
+  .public-walkin-checkin-card { padding: 14px !important; border-radius: 18px !important; }
+  .public-walkin-grid label,
+  .public-walkin-note { font-size: 11.5px; }
+}
+@media (max-width: 380px) {
+  body.member-mode #view-dashboard #kpiGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #view-dashboard .dashboard-quick-grid { grid-template-columns: 1fr !important; }
+}
+
+/* PKG077：手機實測後的介面精簡
+   會員端手機首頁不顯示端別切換按鈕，避免一般會員誤點管理端；
+   管理端手機上方保留常用新增按鈕，隱藏端別切換，避免橫向按鈕被切半。 */
+@media (max-width: 640px) {
+  body.member-mode .hero-actions-floating {
+    display: none !important;
+  }
+  body.admin-mode #switchMemberMode,
+  body.admin-mode #switchAdminMode {
+    display: none !important;
+  }
+  body.admin-mode .hero.hero-banner .hero-actions.hero-actions-floating {
+    justify-content: flex-end !important;
+  }
+  body.admin-mode .hero.hero-banner .hero-actions.hero-actions-floating button {
+    min-width: 86px !important;
+  }
+}
+
+/* PKG077B：會員端手機隱藏切換按鈕後，主視覺高度同步縮短，避免留下大面積空白。 */
+@media (max-width: 640px) {
+  body.member-mode .hero.hero-banner {
+    min-height: 98px !important;
+    padding: 10px !important;
+    background-position: center 10px !important;
+  }
+}
+
+/* PKG078：上線前再次實測精修
+   1) 會員端公開頁不再顯示端別切換按鈕，避免會員誤點管理端。
+   2) 電腦版主視覺橫幅改靠左顯示，避免書法標題被裁切。 */
+body.member-mode #switchMemberMode,
+body.member-mode #switchAdminMode {
+  display: none !important;
+}
+.hero.hero-banner {
+  background-position: left center !important;
+}
+@media (max-width: 760px) {
+  .hero.hero-banner {
+    background-position: 7% center !important;
+  }
+}
+@media (max-width: 640px) {
+  body.member-mode .hero.hero-banner {
+    background-position: center 10px !important;
+  }
+}
+
+/* PKG078B：QR Code 掃描後的公開簽到頁是現場報到流程，隱藏一般會員底部快捷列與側欄入口，避免遮住已回覆名單與現場新增報到表單。 */
+body.public-checkin-mode .mobile-bottom-nav,
+body.public-checkin-mode .hamburger,
+body.public-checkin-mode #sidebar {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  body.public-checkin-mode .main {
+    padding-bottom: max(18px, env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* PKG078C：公開 QR 簽到頁以「報到操作」為主，隱藏統計大卡，讓已回覆出席者選單更快出現在第一段畫面。 */
+body.public-checkin-mode #checkinKpis {
+  display: none !important;
+}
+body.public-checkin-mode .checkin-hero-panel {
+  padding-bottom: 18px !important;
+}
+@media (max-width: 760px) {
+  body.public-checkin-mode #view-checkin > .toolbar {
+    margin-bottom: 12px !important;
+  }
+  body.public-checkin-mode #view-checkin > .toolbar h2 {
+    font-size: 28px !important;
+    line-height: 1.22 !important;
+  }
+}
+
+
+/* PKG083：手機側欄按鈕穩定與主視覺上下留白壓縮 */
+@media (max-width: 760px) {
+  .sidebar {
+    transition: transform .18s ease, box-shadow .18s ease !important;
+    will-change: transform;
+  }
+  .sidebar-close {
+    position: fixed !important;
+    top: max(10px, env(safe-area-inset-top)) !important;
+    right: calc(100vw - min(88vw, 340px) + 10px) !important;
+    z-index: 120 !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    border-radius: 16px !important;
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+    background: rgba(255, 244, 223, .22) !important;
+    border-color: rgba(255, 244, 223, .36) !important;
+  }
+  .sidebar.open {
+    z-index: 110 !important;
+  }
+  body.sidebar-open::before {
+    z-index: 90 !important;
+    pointer-events: auto !important;
+  }
+  .hamburger#toggleSidebar {
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+  }
+
+  /* 手機主視覺：減少豬豬圖上下空白，讓首頁第一畫面更緊湊 */
+  .hero.hero-banner {
+    min-height: 122px !important;
+    padding: 8px !important;
+    border-radius: 18px !important;
+    background-size: 100% 100%, 112% auto !important;
+    background-position: center center, center 6px !important;
+  }
+  body.member-mode .hero.hero-banner {
+    min-height: 82px !important;
+    padding: 6px !important;
+    background-size: 100% 100%, 118% auto !important;
+    background-position: center center, center 4px !important;
+  }
+  body.admin-mode .hero.hero-banner {
+    min-height: 118px !important;
+    padding: 8px !important;
+    background-size: 100% 100%, 110% auto !important;
+    background-position: center center, center 5px !important;
+  }
+  .hero.hero-banner .hamburger {
+    top: 8px !important;
+    right: 8px !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .hero.hero-banner .hero-content-minimal {
+    right: 8px !important;
+    bottom: 8px !important;
+    left: 8px !important;
+  }
+  body.member-mode .hero.hero-banner .hero-content-minimal {
+    display: none !important;
+  }
+  body.admin-mode .hero.hero-banner .hero-actions.hero-actions-floating {
+    padding: 5px !important;
+    border-radius: 12px !important;
+  }
+  body.admin-mode .hero.hero-banner .hero-actions.hero-actions-floating button {
+    min-height: 34px !important;
+    min-width: 82px !important;
+    padding: 6px 9px !important;
+    font-size: 11.5px !important;
+  }
+}
+@media (max-width: 420px) {
+  .hero.hero-banner {
+    min-height: 116px !important;
+    background-size: 100% 100%, 120% auto !important;
+  }
+  body.member-mode .hero.hero-banner {
+    min-height: 78px !important;
+    background-size: 100% 100%, 126% auto !important;
+  }
+  body.admin-mode .hero.hero-banner {
+    min-height: 112px !important;
+    background-size: 100% 100%, 116% auto !important;
+  }
+}
+
+
+/* PKG084：手機主視覺再調整，避免豬豬圖欄位左側標題被裁切或遮住 */
+@media (max-width: 760px) {
+  .hero.hero-banner {
+    background-size: 100% 100%, 106% auto !important;
+    background-position: center center, left 4px top 4px !important;
+  }
+  body.member-mode .hero.hero-banner {
+    min-height: 84px !important;
+    background-size: 100% 100%, 104% auto !important;
+    background-position: center center, left 4px top 4px !important;
+  }
+  body.admin-mode .hero.hero-banner {
+    min-height: 120px !important;
+    background-size: 100% 100%, 104% auto !important;
+    background-position: center center, left 4px top 4px !important;
+  }
+}
+@media (max-width: 420px) {
+  .hero.hero-banner {
+    background-size: 100% 100%, 108% auto !important;
+    background-position: center center, left 2px top 4px !important;
+  }
+  body.member-mode .hero.hero-banner {
+    min-height: 82px !important;
+    background-size: 100% 100%, 106% auto !important;
+    background-position: center center, left 2px top 4px !important;
+  }
+  body.admin-mode .hero.hero-banner {
+    min-height: 116px !important;
+    background-size: 100% 100%, 106% auto !important;
+    background-position: center center, left 2px top 4px !important;
+  }
+}
+
+
+/* PKG085：管理端出席統計新增各課程回覆名單 */
+.attendance-reply-details {
+  margin-top: 18px;
+}
+.attendance-reply-detail-head {
+  margin: 4px 0 12px;
+}
+.attendance-reply-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 14px;
+}
+.attendance-reply-detail-card {
+  border: 1px solid rgba(139, 90, 43, .14);
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255, 252, 246, .88);
+  box-shadow: 0 12px 26px rgba(67, 40, 18, .08);
+}
+.attendance-reply-mini-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 10px 0 12px;
+}
+.attendance-reply-mini-stats span {
+  border: 1px solid rgba(139, 90, 43, .12);
+  border-radius: 12px;
+  padding: 7px 8px;
+  background: rgba(255,255,255,.72);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+.attendance-reply-mini-stats strong {
+  display: block;
+  color: var(--ink);
+  font-size: 18px;
+  margin-top: 3px;
+}
+.attendance-reply-group {
+  border-top: 1px dashed rgba(139, 90, 43, .18);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.attendance-reply-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.attendance-reply-group-head strong { color: var(--ink); }
+.attendance-reply-group-head span { color: var(--muted); font-size: 12px; font-weight: 800; }
+.reply-person-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.reply-person-chip {
+  display: inline-grid;
+  gap: 2px;
+  min-width: 132px;
+  max-width: 100%;
+  border: 1px solid rgba(139, 90, 43, .14);
+  border-radius: 14px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.78);
+  color: var(--ink);
+  line-height: 1.25;
+}
+.reply-person-chip.public-chip { background: #f4f9ff; border-color: rgba(55, 95, 134, .16); }
+.reply-person-chip.member-chip { background: #fff8ec; }
+.reply-person-chip strong { font-size: 13px; }
+.reply-person-chip small { color: var(--muted); font-size: 11px; }
+.reply-person-chip em { color: var(--brand); font-size: 11px; font-style: normal; font-weight: 900; }
+.reply-person-chip .badge { margin-top: 2px; width: fit-content; }
+.attendance-reply-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+@media (max-width: 760px) {
+  .attendance-reply-detail-grid { grid-template-columns: 1fr; }
+  .attendance-reply-detail-card { padding: 13px; border-radius: 18px; }
+  .attendance-reply-mini-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reply-person-chip { width: 100%; }
+  .attendance-reply-card-actions { display: grid; grid-template-columns: 1fr; }
+}
+
+
+/* PKG086：會員 / 管理端會員名單改為列表呈現 */
+.member-list-host {
+  width: 100%;
+}
+.member-list-panel {
+  padding: 16px;
+}
+.member-list-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.member-list-summary strong {
+  color: var(--ink);
+  font-size: 1rem;
+}
+.member-list-table-wrap {
+  margin: 0;
+}
+.member-list-table th,
+.member-list-table td {
+  vertical-align: top;
+  white-space: nowrap;
+}
+.member-list-table .strong-cell {
+  font-weight: 900;
+  color: var(--ink);
+}
+.member-list-table .muted-cell {
+  color: var(--muted);
+  white-space: normal;
+  min-width: 160px;
+  max-width: 280px;
+}
+.member-list-table small {
+  color: var(--muted);
+  font-weight: 700;
+}
+.table-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+@media (max-width: 760px) {
+  .member-list-panel {
+    padding: 12px;
+    border-radius: 18px;
+  }
+  .member-list-summary {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .member-list-table {
+    min-width: 780px;
+  }
+  body.admin-mode .member-list-table {
+    min-width: 980px;
+  }
+  .member-list-table th,
+  .member-list-table td {
+    padding: 9px 8px;
+    font-size: 12px;
+  }
+  .mobile-bottom-nav .nav-item {
+    min-width: 0;
+  }
+}
+
+
+/* PKG087：簽到頁新增不用掃 QR Code 的直接點擊簽到區塊 */
+.click-checkin-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+.click-checkin-course-card {
+  border: 1px solid rgba(56, 121, 79, .18);
+  background: linear-gradient(135deg, rgba(255,255,255,.86), rgba(241, 249, 243, .86));
+}
+.click-checkin-card {
+  border: 1px solid rgba(56, 121, 79, .20);
+  background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(244, 251, 246, .92));
+}
+.click-checkin-card .primary-btn {
+  min-width: 150px;
+}
+@media (max-width: 760px) {
+  .click-checkin-section {
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .click-checkin-card .primary-btn {
+    width: 100%;
+  }
+  .public-checkin-form-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* PKG088：實際檢查後的簽到頁版面精簡
+   直接點擊簽到放在 QR Code 前方，讓現場不用掃碼也能快速完成報到。 */
+.click-checkin-section {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+.compact-qr-layout {
+  margin-top: 10px;
+}
+.compact-qr-layout .qr-card {
+  min-height: 220px;
+}
+.compact-qr-layout .qr-card img {
+  max-width: 178px;
+}
+@media (max-width: 760px) {
+  .checkin-qr-layout.compact-qr-layout {
+    grid-template-columns: 1fr;
+  }
+  .compact-qr-layout .qr-card {
+    min-height: auto;
+    padding: 12px;
+  }
+  .compact-qr-layout .qr-card img {
+    max-width: 150px;
+  }
+  #view-checkin .toolbar h2 {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+}
+
+
+/* PKG090：首頁下一堂課待排中提示 */
+.next-course-pending-box {
+  border: 1px dashed rgba(139, 90, 43, .28);
+  background: rgba(255, 248, 238, .74);
+  color: var(--muted);
+  line-height: 1.8;
+}
+.next-course-pending-box strong {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+
+/* PKG091：雙向同步工具列與課程表管理 */
+.sync-quick-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -6px 0 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(139, 90, 43, .16);
+  border-radius: 18px;
+  background: rgba(255, 250, 243, .84);
+  box-shadow: 0 10px 26px rgba(67, 40, 18, .08);
+}
+.sync-quick-info { display: grid; gap: 2px; }
+.sync-quick-info strong { color: var(--ink); font-size: .95rem; }
+.global-sync-status { color: var(--muted); font-size: .84rem; }
+.global-sync-status.ok { color: var(--green); }
+.global-sync-status.warn { color: #a66a1e; }
+.global-sync-status.err { color: var(--red); }
+.sync-quick-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.sync-quick-panel.has-dirty {
+  border-color: rgba(190, 123, 63, .34);
+  background: rgba(255, 246, 232, .94);
+}
+.course-admin-table-panel { margin-bottom: 14px; }
+.course-admin-manage-table th,
+.course-admin-manage-table td { vertical-align: top; }
+.course-admin-actions { min-width: 110px; }
+.danger-inline {
+  color: var(--red) !important;
+  border-color: rgba(179, 69, 56, .24) !important;
+}
+@media (max-width: 760px) {
+  .sync-quick-panel { display: grid; gap: 8px; margin: -2px 0 10px; padding: 9px; border-radius: 16px; }
+  .sync-quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .sync-quick-actions .small { min-height: 36px; padding: 7px 8px; font-size: 11.5px; }
+  .course-admin-manage-table { min-width: 860px; }
+}
+
+
+/* PKG093：自動同步設定 */
+.auto-sync-options {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(139, 90, 43, .22);
+  border-radius: 16px;
+  background: rgba(255, 250, 243, .58);
+}
+.auto-sync-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: .92rem;
+}
+.auto-sync-options input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand);
+}
+.small-select {
+  max-width: 140px;
+  min-height: 34px;
+  padding: 6px 8px;
+}
+@media (max-width: 760px) {
+  .auto-sync-options label {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    line-height: 1.5;
+  }
+}
+
+
+/* PKG094：出席統計點日期彈出回覆名單 */
+.link-cell-btn {
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+.attendance-click-row {
+  cursor: pointer;
+}
+.attendance-click-row:hover {
+  background: rgba(190, 123, 63, .08);
+}
+.attendance-reply-details {
+  display: none !important;
+}
+.attendance-reply-modal-content {
+  display: grid;
+  gap: 14px;
+}
+.attendance-reply-modal-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.attendance-reply-modal-summary > div {
+  border: 1px solid rgba(139, 90, 43, .14);
+  border-radius: 16px;
+  background: rgba(255, 250, 243, .78);
+  padding: 10px 12px;
+}
+.attendance-reply-modal-summary span,
+.attendance-reply-modal-summary small {
+  display: block;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+.attendance-reply-modal-summary strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.45rem;
+  line-height: 1.25;
+  margin: 2px 0;
+}
+.attendance-reply-modal-section {
+  border: 1px solid rgba(139, 90, 43, .14);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255,255,255,.74);
+}
+.attendance-reply-modal-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(139, 90, 43, .08);
+  border-bottom: 1px solid rgba(139, 90, 43, .10);
+}
+.attendance-reply-modal-section-head h4 {
+  margin: 0;
+  color: var(--ink);
+}
+.attendance-reply-modal-section-head span {
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 800;
+}
+.attendance-reply-line-list {
+  display: grid;
+}
+.attendance-reply-line {
+  display: grid;
+  grid-template-columns: 82px 1.1fr 1fr 1.45fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(139, 90, 43, .10);
+}
+.attendance-reply-line:last-child {
+  border-bottom: 0;
+}
+.reply-line-status {
+  display: inline-flex;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: rgba(56, 121, 79, .12);
+  color: var(--green);
+  font-weight: 900;
+  font-size: .78rem;
+}
+.attendance-reply-line.public-line .reply-line-status {
+  background: rgba(55, 95, 134, .12);
+  color: var(--blue);
+}
+.attendance-reply-line strong {
+  color: var(--ink);
+}
+.attendance-reply-line span,
+.attendance-reply-line small {
+  color: var(--muted);
+}
+.small-empty {
+  margin: 10px;
+  padding: 10px;
+}
+@media (max-width: 760px) {
+  .attendance-reply-modal-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .attendance-reply-line {
+    grid-template-columns: 72px 1fr;
+    gap: 4px 8px;
+  }
+  .attendance-reply-line small,
+  .attendance-reply-line > span:nth-child(3) {
+    grid-column: 2;
+  }
+}
+
+
+/* PKG095：會員 / 牧場名單列印簽到表 */
+.member-list-summary > div {
+  display: grid;
+  gap: 4px;
+}
+.member-list-summary .primary-btn.small {
+  white-space: nowrap;
+}
+@media print {
+  .member-list-panel,
+  .member-list-table-wrap {
+    overflow: visible !important;
+  }
+}
+@media (max-width: 760px) {
+  .member-list-summary {
+    align-items: stretch;
+  }
+  .member-list-summary .primary-btn.small {
+    width: 100%;
+  }
+}
+
+
+
+
+/* PKG097：年度課程表精簡與課程表單縮小 */
+.compact-course-form {
+  gap: 10px 12px;
+  padding-top: 16px;
+}
+.compact-course-form .form-field {
+  gap: 5px;
+}
+.compact-course-form textarea.form-control {
+  min-height: 58px;
+  max-height: 120px;
+  line-height: 1.55;
+}
+.compact-course-form #field-settleNote,
+.compact-course-form #field-parkingNote,
+.compact-course-form #field-content,
+.compact-course-form #field-attachmentLinks,
+.compact-course-form #field-photoLinks,
+.compact-course-form #field-attachmentNote,
+.compact-course-form #field-afterNote,
+.compact-course-form #field-questionNote,
+.compact-course-form #field-applicationNote,
+.compact-course-form #field-followUpNote {
+  min-height: 62px;
+}
+.compact-course-form .course-location-preview {
+  margin-top: -2px;
+}
+.form-actions-split {
+  justify-content: space-between;
+  align-items: center;
+}
+.form-actions-split > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#view-courses .course-grid {
+  margin-top: 0;
+}
+@media (max-width: 760px) {
+  .form-actions-split {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .form-actions-split > div {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .form-actions-split .danger-btn {
+    width: 100%;
+  }
+}
+
+
+/* PKG098：課程新增 / 編輯視窗指定文字欄位固定縮小為 2 行 */
+.compact-course-form textarea.form-control.compact-course-textarea,
+.compact-course-form #field-settleNote,
+.compact-course-form #field-parkingNote,
+.compact-course-form #field-content,
+.compact-course-form #field-attachmentLinks,
+.compact-course-form #field-photoLinks,
+.compact-course-form #field-attachmentNote,
+.compact-course-form #field-afterNote,
+.compact-course-form #field-questionNote,
+.compact-course-form #field-applicationNote,
+.compact-course-form #field-followUpNote {
+  min-height: 42px !important;
+  height: 42px !important;
+  max-height: 70px !important;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+
+/* PKG099：年度會費管理 */
+.annual-fee-control-panel {
+  margin-bottom: 14px;
+}
+.annual-fee-setting-grid {
+  margin-bottom: 10px;
+}
+.annual-fee-table {
+  min-width: 1120px;
+}
+.table-input {
+  width: 100%;
+  min-width: 86px;
+  border: 1px solid rgba(139, 90, 43, .18);
+  border-radius: 10px;
+  padding: 7px 8px;
+  background: rgba(255,255,255,.88);
+  color: var(--ink);
+}
+.table-input.wide {
+  min-width: 150px;
+}
+.annual-fee-table .badge.orange {
+  background: rgba(190, 123, 63, .14);
+  color: #a66a1e;
+}
+@media (max-width: 760px) {
+  .annual-fee-table {
+    min-width: 1040px;
+  }
+}
+
+
+/* PKG100：會員退會保留歷史繳費紀錄 */
+.member-list-table .badge.red,
+.annual-fee-table .badge.red {
+  background: rgba(179, 69, 56, .14);
+  color: var(--red);
+}
+.member-list-table .badge.green,
+.annual-fee-table .badge.green {
+  background: rgba(56, 121, 79, .14);
+  color: var(--green);
+}
+.member-list-table .badge.blue,
+.annual-fee-table .badge.blue {
+  background: rgba(55, 95, 134, .13);
+  color: var(--blue);
+}
+
+
+/* PKG101：會員 / 牧場名單一行式與退會會員名單 */
+.compact-member-list-panel .member-list-summary {
+  gap: 10px;
+}
+.compact-table-wrap {
+  overflow-x: auto;
+}
+.compact-member-table {
+  min-width: 1180px;
+  font-size: 13px;
+}
+.compact-member-table th,
+.compact-member-table td {
+  padding: 8px 9px;
+  vertical-align: middle;
+}
+.compact-member-table td {
+  white-space: nowrap;
+}
+.compact-member-table .text-nowrap {
+  white-space: nowrap;
+}
+.compact-member-table .text-truncate {
+  max-width: 210px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.compact-member-table .member-actions {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.compact-member-table .mini-btn.warn {
+  background: rgba(190, 123, 63, .14);
+  border-color: rgba(190, 123, 63, .30);
+  color: #9c5d16;
+}
+.compact-member-table tr.is-retired-member {
+  opacity: .72;
+  background: rgba(120, 89, 65, .045);
+}
+.compact-member-table tr.is-retired-member .strong-cell {
+  color: rgba(63, 47, 34, .72);
+}
+@media (max-width: 760px) {
+  .compact-member-table {
+    min-width: 1080px;
+    font-size: 12px;
+  }
+  .compact-member-table th,
+  .compact-member-table td {
+    padding: 7px 8px;
+  }
+}
+
+
+/* PKG102：修正右上快速操作按鈕被主視覺遮住 / 手機被裁切 */
+.top-quick-actions {
+  position: sticky;
+  top: 10px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  background: rgba(255, 250, 243, .96);
+  border: 1px solid rgba(139, 90, 43, .14);
+  box-shadow: 0 12px 28px rgba(67, 40, 18, .10);
+  backdrop-filter: blur(10px);
+}
+.top-quick-actions .primary-btn,
+.top-quick-actions .ghost-btn {
+  min-height: 42px;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.hero-banner {
+  z-index: 1;
+}
+.hero-content-minimal,
+.hero-actions-floating {
+  pointer-events: none;
+}
+.toolbar,
+.toolbar-actions {
+  position: relative;
+  z-index: 12;
+}
+.toolbar-actions .primary-btn,
+.toolbar-actions .ghost-btn,
+.toolbar-actions .danger-btn,
+.toolbar-actions .file-btn {
+  position: relative;
+  z-index: 13;
+}
+@media (max-width: 760px) {
+  .top-quick-actions {
+    position: relative;
+    top: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 9px;
+    border-radius: 18px;
+    overflow: visible;
+  }
+  .top-quick-actions .primary-btn,
+  .top-quick-actions .ghost-btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+  body.member-mode .top-quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hero-banner {
+    min-height: 132px;
+  }
+}
+@media (max-width: 420px) {
+  .top-quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* PKG103：實測修正右上快速按鈕完全消失
+   原因：系統預設常進入 member-mode，舊版 CSS 會把 .admin-only 與 #switchMemberMode/#switchAdminMode 全部 display:none。
+   這裡只針對最上方快速操作列強制顯示，其他管理端頁面權限不受影響。 */
+.top-quick-actions {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  min-height: 58px !important;
+  position: sticky !important;
+  top: 8px !important;
+  z-index: 9999 !important;
+}
+body.member-mode .top-quick-actions .admin-only,
+body.member-mode .top-quick-actions #switchMemberMode,
+body.member-mode .top-quick-actions #switchAdminMode,
+body.admin-mode .top-quick-actions #switchMemberMode,
+body.admin-mode .top-quick-actions #switchAdminMode {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.top-quick-actions .primary-btn,
+.top-quick-actions .ghost-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  min-width: 86px !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 760px) {
+  .top-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    min-height: auto !important;
+    position: relative !important;
+    top: auto !important;
+    margin: 0 0 10px !important;
+    z-index: 9999 !important;
+  }
+  .top-quick-actions .primary-btn,
+  .top-quick-actions .ghost-btn {
+    display: inline-flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+  }
+}
+
+
+/* PKG104：同步時間統一顯示台灣時間 */
+.global-sync-status {
+  line-height: 1.45;
+}
+.mobile-primary-badge {
+  white-space: normal;
+}
+
+
+/* PKG105：會員端出席回覆雲端上傳進度 */
+.cloud-upload-progress {
+  margin: 10px 0 6px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(139, 90, 43, .12);
+}
+.cloud-upload-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(139, 90, 43, .13);
+  overflow: hidden;
+}
+.cloud-upload-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(139, 90, 43, .65), rgba(66, 132, 92, .85));
+  transition: width .35s ease;
+}
+.signup-confirmation.warn .cloud-upload-bar i {
+  background: linear-gradient(90deg, rgba(190, 123, 63, .75), rgba(179, 69, 56, .85));
+}
+.cloud-upload-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+.cloud-upload-steps span {
+  border-radius: 999px;
+  padding: 5px 7px;
+  text-align: center;
+  background: rgba(139, 90, 43, .08);
+  color: rgba(58, 44, 34, .75);
+}
+.cloud-upload-steps span.done {
+  background: rgba(66, 132, 92, .16);
+  color: var(--green);
+  font-weight: 800;
+}
+.cloud-upload-steps span.fail {
+  background: rgba(179, 69, 56, .15);
+  color: var(--red);
+  font-weight: 800;
+}
+#submitPublicSignup[disabled] {
+  opacity: .68;
+  cursor: progress;
+}
+@media (max-width: 760px) {
+  .cloud-upload-steps { grid-template-columns: 1fr; }
+}
+
+
+/* PKG106: Clean GitHub-ready package. */
+
+
+/* PKG107：手機版實測修正年度會費頁 money undefined error */
+
+
+
+
+
+/* PKG109：上方快速操作列精簡
+   依使用者確認：電腦版與手機版最上方只保留「會員端、管理端」兩個端別切換按鈕；
+   新增課程 / 新增會員 / 新增地點不再放在額外的上方欄位，避免手機變成 5 顆兩欄按鈕。 */
+.top-quick-actions.mode-switch-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: auto !important;
+  padding: 8px 10px !important;
+}
+.top-quick-actions.mode-switch-actions .admin-only,
+.top-quick-actions.mode-switch-actions [data-open-form] {
+  display: none !important;
+}
+body.member-mode .top-quick-actions.mode-switch-actions #switchMemberMode,
+body.member-mode .top-quick-actions.mode-switch-actions #switchAdminMode,
+body.admin-mode .top-quick-actions.mode-switch-actions #switchMemberMode,
+body.admin-mode .top-quick-actions.mode-switch-actions #switchAdminMode {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.top-quick-actions.mode-switch-actions #switchMemberMode,
+.top-quick-actions.mode-switch-actions #switchAdminMode {
+  flex: 0 0 auto !important;
+  min-width: 92px !important;
+}
+@media (max-width: 760px) {
+  .top-quick-actions.mode-switch-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    position: relative !important;
+    top: auto !important;
+    margin: 0 0 8px !important;
+    padding: 8px !important;
+  }
+  .top-quick-actions.mode-switch-actions #switchMemberMode,
+  .top-quick-actions.mode-switch-actions #switchAdminMode {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+  }
+}
+
+/* PKG109: Top quick action bar simplified to member/admin mode switch only. */
+
+/* PKG110: retired member list uses explicit permanent delete wording. */
